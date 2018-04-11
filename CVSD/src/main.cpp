@@ -43,5 +43,19 @@ int main(void){
 //}
 
 void genClock(int _Rate){
+	switch (_Rate){
+	case 16000:
+		OCR1A = 0x3E8;				/**< Offsetwert laden: 16e6 / Prescaler / OCRA = 16e3 Hz */
+		TCCR1B |= (1<<WGM12);		/**< Clear Timer on Compare */
+		TIMSK1 |= (1<<OCIE1A);		/**< enable interrupt */
+		TCCR1B |= (1<<CS10);
+		break;
+	case 32000:
+		breack;
+	case 64000:
+		breack;
+	default:
+		breack;
+	}
 	return;
 }
