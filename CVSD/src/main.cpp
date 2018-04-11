@@ -20,7 +20,7 @@ int main(void){
 	//MyWiznet.init();
 	MyWiznet.readMR();
 	while(1){
-		PORTC ^= ( 1 << PC7 );  // Toggle PB0 z.&nbsp;B. angeschlossene LED
+		PORTC ^= ( 1 << PC7 );  // Toggle PB0 z.B. angeschlossene LED
 		_delay_ms(1000);       // Eine Sekunde warten...
 	}
 	return(0);
