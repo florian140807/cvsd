@@ -12,6 +12,8 @@
 
 #include "cvsd.h"
 
+void genClock(int _Rate);
+
 int main(void){
 	DDRC = 0xff;
 	W5500Class MyWiznet;
@@ -39,3 +41,7 @@ int main(void){
 ///* Wait for transmission complete */
 //while(!(SPSR & (1<<SPIF)));
 //}
+
+void genClock(int _Rate){
+	return;
+}
