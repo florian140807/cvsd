@@ -14,9 +14,7 @@
 #include <string.h>
 #include <util/delay.h>
 #include "avr/io.h"
-#include "SPI.h"
-#include "w5500.h"
-#include "Arduino.h"
+#include "avr/pgmspace.h"
 
 
 

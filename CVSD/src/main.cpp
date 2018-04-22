@@ -8,32 +8,40 @@
  */
 
 #define F_CPU 16000000UL
-
+#define TOGGLE_LED (PORTC ^= _BV(7)) //TOGGLE_MAKRO for Debugging PC7
 
 #include "cvsd.h"
 
 void genClock(int _Rate);
+void SPI_MasterInit(void);
+//void Init_Socket(void);
 
 int main(void){
 	DDRC = 0xff;
-	W5500Class MyWiznet;
-	//MyWiznet.init();
-	MyWiznet.readMR();
+	SPI_MasterInit();
 	while(1){
-		PORTC ^= ( 1 << PC7 );  // Toggle PB0 z.B. angeschlossene LED
+		TOGGLE_LED;  // Toggle PC7 z.B. angeschlossene LED
 		_delay_ms(1000);       // Eine Sekunde warten...
 	}
 	return(0);
 }
 
 
-//void SPI_MasterInit(void)
-//{
-///* Set MOSI and SCK output, all others input */
-//DDRB = (1<<PB2)|(1<<PB1);
-///* Enable SPI, Master, set clock rate fck/16 */
-//SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR0);
-//}
+void SPI_MasterInit(void)
+{
+/* Set MOSI and SCK output, all others input */
+DDRB = (1<<PB2)|(1<<PB1);
+/* Enable SPI, Master, set clock rate fck/16 */
+SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR0);
+}
+void Init_W5500(void)
+{
+	// Ethernet Setup
+	unsigned char mac_addr[] = {0x00,0x16,0x36,0xDE,0x58,0xF6};
+	unsigned char ip_addr[] = {192,168,1,144};
+	unsigned char sub_mask[] = {255,255,255,0};
+	unsigned char gtw_addr[] = {192,168,1,1};
+}
 //void SPI_MasterTransmit(char cData)
 //{
 ///* Start transmission */
@@ -51,11 +59,11 @@ void genClock(int _Rate){
 		TCCR1B |= (1<<CS10);
 		break;
 	case 32000:
-		breack;
+		break;
 	case 64000:
-		breack;
+		break;
 	default:
-		breack;
+		break;
 	}
 	return;
 }
