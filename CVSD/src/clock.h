@@ -11,11 +11,11 @@
 class clock {
 public:
 	clock();
-	clock(unsigned int _clk);
-	unsigned int getrate();
+	clock(uint16_t _clk);
+	uint16_t getrate();
 	~clock();
 private:
-	unsigned int rate;
+	uint16_t rate;
 };
 
 #endif /* SRC_CLOCK_H_ */

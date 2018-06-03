@@ -7,7 +7,7 @@
 
 #include "cvsd.h"
 
-unsigned int rate = 0;
+uint16_t rate = 0;
 
 clock::clock() {
 	OCR1A = 0x1F3;				/**< Offsetwert laden: 16e6 / Prescaler / OCRA = 16e3 Hz */
@@ -17,7 +17,7 @@ clock::clock() {
 	rate = 16000;
 }
 
-clock::clock(unsigned int _rate){
+clock::clock(uint16_t _rate){
 	switch (_rate){
 		case 16000:
 			OCR1A = 0x1F3;				/**< Offsetwert laden: 16e6 / Prescaler / OCRA = 16e3 Hz */
@@ -48,12 +48,11 @@ clock::clock(unsigned int _rate){
 		return;
 }
 
-unsigned int clock::getrate(){
+uint16_t clock::getrate(){
 	return rate;
 }
 
 clock::~clock() {
-	// TODO Auto-generated destructor stub
 }
 
 /* Die ISR erzeugt im Takt der genClock() Funktion an den Clockausgängen ein Rechtecksignal

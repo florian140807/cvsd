@@ -23,7 +23,7 @@ void serial::serial_send_byte(unsigned char _data){
 
 void serial::serial_send_int(unsigned int _data){
 	char buffer [50];
-	int n, a=5, b=3;
+	int n;
 	n=sprintf (buffer, "%d", _data);
 	serial_putstring(buffer);
 }

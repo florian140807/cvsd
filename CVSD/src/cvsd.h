@@ -25,6 +25,7 @@
 #include "avr/pgmspace.h"
 #include "serial.h"
 #include "clock.h"
+#include "w5500.h"
 
 
 
