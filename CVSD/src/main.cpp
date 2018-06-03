@@ -10,6 +10,8 @@
 #define F_CPU 16000000UL
 #define TOGGLE_LED (PORTC ^= _BV(7)) //TOGGLE_MAKRO for Debugging PC7
 
+
+
 #include "cvsd.h"
 
 void genClock(int _Rate);
@@ -41,6 +43,7 @@ void Init_W5500(void)
 	unsigned char ip_addr[] = {192,168,1,144};
 	unsigned char sub_mask[] = {255,255,255,0};
 	unsigned char gtw_addr[] = {192,168,1,1};
+
 }
 //void SPI_MasterTransmit(char cData)
 //{
