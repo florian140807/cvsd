@@ -20,6 +20,15 @@ void serial::serial_send_byte(unsigned char _data){
 	while(!(UCSR1A &(1<<UDRE1)));
 	UDR1=_data;
 }
+
+void serial::serial_send_int(unsigned int _data){
+	char buffer [50];
+	int n, a=5, b=3;
+	n=sprintf (buffer, "%d", _data);
+	serial_putstring(buffer);
+}
+
+
 void serial::serial_putstring(char* _strg_ptr){
 	while(*_strg_ptr != 0x00){
 		serial_send_byte(*_strg_ptr);

@@ -13,6 +13,7 @@ public:
 	serial();
 	~serial();
 	void serial_send_byte(unsigned char _data);
+	void serial_send_int(unsigned int _data);
 	void serial_putstring(char* _strg_ptr);
 };
 
