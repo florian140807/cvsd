@@ -7,7 +7,7 @@
  *      20180409: even more moved to online git
  */
 
-#define F_CPU 16000000UL
+
 #define TOGGLE_LED (PORTC ^= _BV(7)) //TOGGLE_MAKRO for Debugging PC7
 #define FX_XTAL (PORTB ^= _BV(4))	// FX609 XTALI (1), ATMEGA32u4 PB4 (IO8)
 #define FX_ENC_OUT 7				// FX609 Encoder Ouptut (6), ATMEGA32u4 PB7 (IO11)
@@ -26,10 +26,11 @@ int main(void){
 	DDRD = 0x40;		// Pin PD6 als Ausgang initialisieren
 	genClock(32000);
 	SPI_MasterInit();
+	serial myUART;
 	sei();
+	//unsigned char a = 10;
 	while(1){
-//		TOGGLE_LED;
-//		_delay_ms(1000);
+		myUART.serial_putstring(" kHz");
 	}
 	return(0);
 }
