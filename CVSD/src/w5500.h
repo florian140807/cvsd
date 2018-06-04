@@ -15,6 +15,7 @@ public:
 	void SetLayer2();
 	void SetLayer3();
 	void SetLayer4();
+	void transmitChar(char _cData);
 private:
 	unsigned char mac_addr[];
 	unsigned char ip_addr[];

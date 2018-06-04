@@ -26,10 +26,4 @@ int main(void){
 	}
 	return(0);
 }
-//void SPI_MasterTransmit(char cData)
-//{
-///* Start transmission */
-//SPDR = cData;
-///* Wait for transmission complete */
-//while(!(SPSR & (1<<SPIF)));
-//}
+

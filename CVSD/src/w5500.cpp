@@ -12,9 +12,6 @@ w5500::w5500() {
 	DDRB |= (1<<PB2)|(1<<PB1);
 	/* Enable SPI, Master, set clock rate fck/16 */
 	SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR0);
-	SetLayer2();
-	SetLayer3();
-	SetLayer4();
 }
 
 void w5500::SetLayer2(){
@@ -47,6 +44,14 @@ void w5500::SetLayer3(){
 void w5500::SetLayer4(){
 	src_port = 50000;
 	dst_port = 50001;
+}
+
+void w5500::transmitChar(char cData)
+{
+/* Start transmission */
+SPDR = cData;
+/* Wait for transmission complete */
+while(!(SPSR & (1<<SPIF)));
 }
 
 w5500::~w5500() {
