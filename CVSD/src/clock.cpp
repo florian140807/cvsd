@@ -49,6 +49,7 @@ clock::clock(uint16_t _rate){
 }
 
 uint16_t clock::getrate(){
+	rate = rate/1000;
 	return rate;
 }
 
