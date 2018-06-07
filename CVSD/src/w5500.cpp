@@ -9,7 +9,7 @@
 
 w5500::w5500() {
 	/* Set MOSI and SCK output, all others input */
-	DDRB |= (1<<PB2)|(1<<PB1);
+	DDRB |= (1<<PB2)|(1<<PB1)|(1<<PB6);
 	/* Enable SPI, Master, set clock rate fck/16 */
 	SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR0);
 }
@@ -46,14 +46,15 @@ void w5500::SetLayer4(){
 	dst_port = 50001;
 }
 
-void w5500::transmitChar(char cData)
+unsigned char w5500::transmitChar(char _cData)
 {
 /* Start transmission */
-SPDR = cData;
+SPDR = _cData;
 /* Wait for transmission complete */
+asm volatile("nop");
 while(!(SPSR & (1<<SPIF)));
+return SPDR;
 }
-
 w5500::~w5500() {
 	// TODO Auto-generated destructor stub
 }

@@ -9,9 +9,6 @@
 
 #include "cvsd.h"
 
-void SPI_MasterInit(void);
-//void Init_Socket(void);
-
 int main(void){
 	DDRC = 0xff;		// Port C als Ausgang initialisieren
 	DDRB = 0x10;		// Pin PB4 als Ausgang initialisieren
@@ -20,8 +17,9 @@ int main(void){
 	w5500 myW5500;
 	serial myUART;
 	sei();
-	//unsigned char a = 10;
+
 	while(1){
+
 		myUART.serial_send_int(myClock.getrate());
 	}
 	return(0);
