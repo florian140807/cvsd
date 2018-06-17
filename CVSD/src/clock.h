@@ -12,7 +12,7 @@ class clock {
 public:
 	clock();
 	clock(uint16_t _clk);
-	uint8_t getrate();
+	uint16_t getrate();
 	~clock();
 private:
 	uint16_t rate;

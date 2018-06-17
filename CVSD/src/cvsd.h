@@ -15,10 +15,11 @@
 #define FX_XTAL (PORTB ^= _BV(4))	// FX609 XTALI (1), ATMEGA32u4 PB4 (IO8)
 #define FX_ENC_OUT 7				// FX609 Encoder Ouptut (6), ATMEGA32u4 PB7 (IO11)
 #define FX_ENC_DCLK (PORTD ^= _BV(6))				// FX609 Encoder Data Clock (5), ATMEGA32u4 PD6 (IO12)
-#define W5500_CS (PORTB &= _BV(6))		// W5500 Chip Select (Low active)
-#define W5500_CDS (PORTB |= _BV(6))		// W5500 Chip De-Select
+#define W5500_CS (PORTB &= ~(1<<PORTB6))		// W5500 Chip Select (Low active)
+#define W5500_CDS (PORTB |= (1<<PORTB6))		// W5500 Chip De-Select
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "avr/interrupt.h"
 #include <stdint.h>
 #include <string.h>
