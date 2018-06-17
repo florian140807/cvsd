@@ -18,9 +18,13 @@ class w5500 {
 public:
 	w5500();
 	~w5500();
-	void SetLayer2();
-	void SetLayer3();
-	void SetLayer4();
+	void SetSHAR(unsigned char _a, unsigned char _b, unsigned char _c, unsigned char _d, unsigned char _e,
+			unsigned char _f);
+	void SetSIPR(unsigned char _a, unsigned char _b, unsigned char _c, unsigned char _d);
+	void SetSUBR(unsigned char _a, unsigned char _b, unsigned char _c, unsigned char _d);
+	void SetGAR(unsigned char _a, unsigned char _b, unsigned char _c, unsigned char _d);
+	void SetPORT(unsigned char _a, unsigned char _b);
+	void SetDstPORT(unsigned char _a, unsigned char _b);
 	unsigned char transmitChar(char _cData);
 	unsigned char receive();
 private:
@@ -28,8 +32,8 @@ private:
 	unsigned char ip_addr[];
 	unsigned char sub_mask[];
 	unsigned char gtw_addr[];
-	unsigned int src_port;
-	unsigned int dst_port;
+	unsigned char src_port[];
+	unsigned char dst_port[];
 };
 
 #endif /* SRC_W5500_H_ */

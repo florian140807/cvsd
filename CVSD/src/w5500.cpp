@@ -13,37 +13,46 @@ w5500::w5500() {
 	/* Enable SPI, Master, set clock rate fck/16 */
 	SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR0);
 }
-
-void w5500::SetLayer2(){
-	mac_addr[0] = 0x00;
-	mac_addr[1] = 0x16;
-	mac_addr[2] = 0x36;
-	mac_addr[3] = 0xDE;
-	mac_addr[4] = 0x58;
-	mac_addr[5] = 0xF6;
+// Set W5500 MAC Address
+void w5500::SetSHAR(unsigned char _a, unsigned char _b, unsigned char _c, unsigned char _d, unsigned char _e,
+		unsigned char _f){
+	mac_addr[5] = _a;
+	mac_addr[4] = _b;
+	mac_addr[3] = _c;
+	mac_addr[2] = _d;
+	mac_addr[1] = _e;
+	mac_addr[0] = _f;
 }
-
-void w5500::SetLayer3(){
-	ip_addr[0] = 192;
-	ip_addr[1] = 168;
-	ip_addr[2] = 1;
-	ip_addr[3] = 144;
-
-	sub_mask[0] = 255;
-	sub_mask[1] = 255;
-	sub_mask[2] = 255;
-	sub_mask[3] = 0;
-
-	gtw_addr[0] = 192;
-	gtw_addr[1] = 168;
-	gtw_addr[2] = 1;
-	gtw_addr[3] = 1;
-
+//Set W5500 IP Address
+void w5500::SetSIPR(unsigned char _a, unsigned char _b, unsigned char _c, unsigned char _d){
+	ip_addr[3] = _a;
+	ip_addr[2] = _b;
+	ip_addr[1] = _c;
+	ip_addr[0] = _d;
 }
-
-void w5500::SetLayer4(){
-	src_port = 50000;
-	dst_port = 50001;
+//Set W5500 Subnetmask
+void w5500::SetSUBR(unsigned char _a, unsigned char _b, unsigned char _c, unsigned char _d){
+	sub_mask[3] = _a;
+	sub_mask[2] = _b;
+	sub_mask[1] = _c;
+	sub_mask[0] = _d;
+}
+//Set W5500 Gateway Address
+void w5500::SetGAR(unsigned char _a, unsigned char _b, unsigned char _c, unsigned char _d){
+	gtw_addr[3] = _a;
+	gtw_addr[2] = _b;
+	gtw_addr[1] = _c;
+	gtw_addr[0] = _d;
+}
+//Set W5500 Source Port
+void w5500::SetPORT(unsigned char _a, unsigned char _b){
+	src_port[1] = _a;
+	src_port[0] = _b;
+}
+//Set W5500 Destination Port
+void w5500::SetDstPORT(unsigned char _a, unsigned char _b){
+	src_port[1] = _a;
+	src_port[0] = _b;
 }
 
 unsigned char w5500::transmitChar(char _cData)
@@ -51,7 +60,7 @@ unsigned char w5500::transmitChar(char _cData)
 /* Start transmission */
 SPDR = _cData;
 /* Wait for transmission complete */
-asm volatile("nop");
+//asm volatile("nop");
 while(!(SPSR & (1<<SPIF)));
 return SPDR;
 }
