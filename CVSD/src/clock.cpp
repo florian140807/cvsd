@@ -57,10 +57,8 @@ clock::~clock() {
 }
 
 /* Die ISR erzeugt im Takt der genClock() Funktion an den Clockausgängen ein Rechtecksignal
- * Das Makro FX_XTAL toggled den Ausgang PB4
- * Das Makro FX_ENC_DCLK toggled den Ausgang PD6
+ * Das Makro FX_ENC_DCLK toggled den Ausgang PD6 und den Ausgang PB4
  */
 ISR(TIMER1_COMPA_vect){
-	FX_XTAL;
 	FX_ENC_DCLK;
 }
