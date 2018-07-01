@@ -125,7 +125,7 @@ int main(void){
 //		tmp = SPDR;
 //		myUART.serial_putstring(itoa(tmp,s,10));
 		W5500_CS;
-		_delay_ms(2);
+		_delay_ms(1);
 		W5500_CDS;
 	}
 	return(0);
