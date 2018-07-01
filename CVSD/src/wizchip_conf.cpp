@@ -52,7 +52,7 @@
 //#include <stddef.h>
 //
 
-//#include "wizchip_conf.h"
+#include "wizchip_conf.h"
 
 /////////////
 //M20150401 : Remove ; in the default callback function such as wizchip_cris_enter(), wizchip_cs_select() and etc.
@@ -232,12 +232,16 @@ void reg_wizchip_bus_cbfunc(iodata_t(*bus_rb)(uint32_t addr), void (*bus_wb)(uin
    if(!bus_rb || !bus_wb)
    {
       WIZCHIP.IF.BUS._read_data   = wizchip_bus_readdata;
-      WIZCHIP.IF.BUS._write_data  = wizchip_bus_writedata;
+     WIZCHIP.IF.BUS._write_data  = wizchip_bus_writedata;
+      //WIZCHIP.IF.BUS._read_byte   = wizchip_bus_readdata;
+      //WIZCHIP.IF.BUS._write_byte  = wizchip_bus_writedata;
    }
    else
    {
       WIZCHIP.IF.BUS._read_data   = bus_rb;
       WIZCHIP.IF.BUS._write_data  = bus_wb;
+      //WIZCHIP.IF.BUS._read_byte   = bus_rb;
+     // WIZCHIP.IF.BUS._write_byte  = bus_wb;
    }
 }
 
@@ -264,6 +268,8 @@ void reg_wizchip_spiburst_cbfunc(void (*spi_rb)(uint8_t* pBuf, uint16_t len), vo
 
    if(!spi_rb || !spi_wb)
    {
+      //WIZCHIP.IF.SPI._read_burst   = wizchip_spi_readburst;
+      //WIZCHIP.IF.SPI._write_burst  = wizchip_spi_writeburst;
       WIZCHIP.IF.SPI._read_burst   = wizchip_spi_readburst;
       WIZCHIP.IF.SPI._write_burst  = wizchip_spi_writeburst;
    }

@@ -51,7 +51,7 @@
 //! THE POSSIBILITY OF SUCH DAMAGE.
 //
 //*****************************************************************************
-//#include <stdio.h>
+#include <stdio.h>
 
 
 #define _W5500_SPI_VDM_OP_          0x00
