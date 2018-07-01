@@ -8,10 +8,14 @@
 #include "cvsd.h"
 
 w5500::w5500() {
+	volatile char IOReg;
 	/* Set MOSI and SCK output, all others input */
-	DDRB |= (1<<PB2)|(1<<PB1);
-	/* Enable SPI, Master, set clock rate fck/16 */
-	SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR0);
+	//DDRB |= (1<<PB2)|(1<<PB1);
+	/* Enable SPI, Master, set clock rate fck/4 */
+	SPCR = (1<<SPE)|(1<<MSTR);
+	// clear SPIF bit in SPSR
+	IOReg   = SPSR;
+	IOReg   = SPDR;
 }
 // Set W5500 MAC Address
 void w5500::SetSHAR(uint8_t _a, uint8_t _b, uint8_t _c, uint8_t _d, uint8_t _e, uint8_t _f){
