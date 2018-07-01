@@ -44,7 +44,7 @@ int main(void){
 	myW5500.transmitChar(0x00);
 	myW5500.transmitChar(0x00);
 	myW5500.transmitChar(0x06);
-	myW5500.transmitChar(0x12);
+	myW5500.transmitChar(0x02);
 	W5500_CDS;
 	// W5500 Set MAC
 	W5500_CS;
@@ -90,7 +90,6 @@ int main(void){
 	W5500_CDS;
 
 	while(1){
-		W5500_CDS;
 		W5500_CS;
 		myW5500.transmitChar(0x00); 					//Address Phase bit 15-8
 		myW5500.transmitChar(0x0F); 					//Address Phase bit 7-0

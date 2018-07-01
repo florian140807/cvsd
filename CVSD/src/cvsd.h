@@ -14,8 +14,9 @@
 #define TOGGLE_LED (PORTC ^= _BV(7)) //TOGGLE_MAKRO for Debugging PC7
 #define FX_ENC_OUT 7				// FX609 Encoder Ouptut (6), ATMEGA32u4 PB7 (IO11)
 #define FX_ENC_DCLK (PORTD ^= _BV(6))				// FX609 Encoder Data Clock (5), ATMEGA32u4 PD6 (IO12)
-#define W5500_CS (PORTB &= ~(1<<PORTB6))		// W5500 Chip Select (Low active)
-#define W5500_CDS (PORTB |= (1<<PORTB6))		// W5500 Chip De-Select
+#define W5500_CDS (PORTB &= ~(1<<PORTB6))		// W5500 Chip Select (Low active)
+#define W5500_CS (PORTB |= (1<<PORTB6))		// W5500 Chip De-Select
+
 
 #include <stdio.h>
 #include <stdlib.h>
