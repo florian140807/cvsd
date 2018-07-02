@@ -29,10 +29,7 @@
 #include "avr/pgmspace.h"
 #include "serial.h"
 #include "clock.h"
-#include "wizchip_conf.h"
-#include "socket.h"
-//#include "w5500.h"
-
+#include "w5500.h"
 
 
 #endif /* CVSD_H_ */
