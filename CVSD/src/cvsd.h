@@ -24,10 +24,11 @@
 #include "avr/interrupt.h"
 #include <stdint.h>
 #include <string.h>
+#include <ctype.h>
 #include <util/delay.h>
 #include "avr/io.h"
 #include "avr/pgmspace.h"
-#include "usart.h"
+#include "serial.h"
 #include "clock.h"
 #include "w5500.h"
 

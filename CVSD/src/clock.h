@@ -5,8 +5,11 @@
  *      Author: Florian
  */
 
-#ifndef SRC_CLOCK_H_
-#define SRC_CLOCK_H_
+#ifndef _CLOCK_H
+#define _CLOCK_H
+
+#include "cvsd.h"
+
 
 class clock {
 public:
@@ -16,6 +19,7 @@ public:
 	~clock();
 private:
 	uint16_t rate;
+
 };
 
-#endif /* SRC_CLOCK_H_ */
+#endif /* _CLOCK_H_ */

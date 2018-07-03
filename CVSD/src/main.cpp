@@ -30,7 +30,7 @@ int main(void){
 	myW5500.writeSHAR(mac_addr);
 	myW5500.writeSIPR(ip_addr);
 	myW5500.writeSUBR(sub_mask);
-	//serial myUART;
+	serial myUART;
 	sei();
 
 	while(1){
