@@ -1,7 +1,5 @@
 #include "cvsd.h"
 
-
-
 void W5500Class::init(void)
 {
 	_delay_ms(1000);
@@ -32,6 +30,31 @@ uint16_t W5500Class::write(uint16_t _addr, uint8_t _cb, const uint8_t *_buf, uin
         transfer(_buf[i]);
     }
     resetSS();
+    return _len;
+}
+
+uint8_t W5500Class::read(uint16_t _addr, uint8_t _cb)
+{
+    setSS();
+    transfer(_addr >> 8);
+    transfer(_addr & 0xFF);
+    transfer(_cb);
+    uint8_t _data = transfer(0);
+    resetSS();
+    return _data;
+}
+
+uint16_t W5500Class::read(uint16_t _addr, uint8_t _cb, uint8_t *_buf, uint16_t _len)
+{
+    setSS();
+    transfer(_addr >> 8);
+    transfer(_addr & 0xFF);
+    transfer(_cb);
+    for (uint16_t i=0; i<_len; i++){
+        _buf[i] = transfer(0);
+    }
+    resetSS();
+
     return _len;
 }
 

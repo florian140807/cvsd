@@ -189,13 +189,16 @@ public:
 
   static uint8_t  write(uint16_t _addr, uint8_t _cb, uint8_t _data);
   static uint16_t write(uint16_t _addr, uint8_t _cb, const uint8_t *buf, uint16_t len);
+  static uint8_t  read(uint16_t _addr, uint8_t _cb );
+  static uint16_t read(uint16_t _addr, uint8_t _cb, uint8_t *buf, uint16_t len);
+
   // W5500 Registers
   // ---------------
 private:
  // static uint8_t  write(uint16_t _addr, uint8_t _cb, uint8_t _data);
  //static uint16_t write(uint16_t _addr, uint8_t _cb, const uint8_t *buf, uint16_t len);
-  static uint8_t  read(uint16_t _addr, uint8_t _cb );
-  static uint16_t read(uint16_t _addr, uint8_t _cb, uint8_t *buf, uint16_t len);
+ //static uint8_t  read(uint16_t _addr, uint8_t _cb );
+  //static uint16_t read(uint16_t _addr, uint8_t _cb, uint8_t *buf, uint16_t len);
 
 #define __GP_REGISTER8(name, address)             \
   static inline void write##name(uint8_t _data) { \
@@ -241,13 +244,18 @@ public:
 #undef __GP_REGISTER16
 #undef __GP_REGISTER_N
 
-  // W5500 Socket registers
-  // ----------------------
-private:
   static inline uint8_t readSn(SOCKET _s, uint16_t _addr);
   static inline uint8_t writeSn(SOCKET _s, uint16_t _addr, uint8_t _data);
   static inline uint16_t readSn(SOCKET _s, uint16_t _addr, uint8_t *_buf, uint16_t len);
   static inline uint16_t writeSn(SOCKET _s, uint16_t _addr, uint8_t *_buf, uint16_t len);
+
+  // W5500 Socket registers
+  // ----------------------
+private:
+//  static inline uint8_t readSn(SOCKET _s, uint16_t _addr);
+//  static inline uint8_t writeSn(SOCKET _s, uint16_t _addr, uint8_t _data);
+//  static inline uint16_t readSn(SOCKET _s, uint16_t _addr, uint8_t *_buf, uint16_t len);
+//  static inline uint16_t writeSn(SOCKET _s, uint16_t _addr, uint8_t *_buf, uint16_t len);
 
   //static const uint16_t CH_BASE = 0x0000;
   //static const uint16_t CH_SIZE = 0x0000;
