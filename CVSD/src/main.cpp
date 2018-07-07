@@ -23,12 +23,15 @@ int main(void){
 //	*shiftReg = 0;								/**< Initialisierung Schieberegister */
 
 	uint16_t freesize = 0;
-	uint16_t data = 0xAAAA;
-	uint16_t *data_ptr = &data;
-	uint16_t len = sizeof(data);
+	uint16_t data1 = 0xAAAA;
+	uint8_t data2 = 0xBB;
+	uint16_t *data1_ptr = &data1;
+	uint16_t len1 = sizeof(data1);
+	uint8_t *data2_ptr = &data2;
+	uint16_t len2 = sizeof(data2);
 	uint8_t mac_addr[] = {0x90,0xA2,0xDA,0x11,0x34,0x30};
 	uint8_t ip_addr[] = {192,168,2,144};
-	uint8_t remote_ip[] = {192,168,2,255};
+	uint8_t remote_ip[] = {192,168,2,114};
 	uint8_t sub_mask[] = {255,255,255,0};
 	uint8_t gtw_addr[] = {192,168,2,1};
 	uint16_t sPort = 50000;
@@ -39,6 +42,7 @@ int main(void){
 	MR myModeregister;
 	SnSR mySocketStatusRegister;
 	SnMR mySocketModeRegister;
+	SnIR myInterruptRegister;
 	myW5500.writeMR(myModeregister.RST);
 	myW5500.writeGAR(gtw_addr);
 	myW5500.writeSHAR(mac_addr);
@@ -53,8 +57,9 @@ int main(void){
 	}
 	//myW5500.writeSnCR(0,Sock_CLOSE);
 
-	freesize = myW5500.readSnTX_FSR(0);
-	while(freesize < len) freesize = myW5500.readSnTX_FSR(0);
+	//freesize = myW5500.readSnTX_FSR(0);
+	freesize = myW5500.getTXFreeSize(0);
+	while(freesize < len1) freesize = myW5500.readSnTX_FSR(0);
 	myW5500.writeSnDIPR(0,remote_ip);
 	myW5500.writeSnDPORT(0,dstPort);
 
@@ -64,16 +69,21 @@ int main(void){
 	char t[10];
 	uint16_t tmp = 0;
 	serial myUART;
-	tmp = myClock.getrate();
+	//tmp = myClock.getrate();
+	tmp = freesize;
 	itoa(tmp,t,10);
 	//DEBUGGING END
 	sei();
 
 	while(1){
-		uint16_t dst_ptr = myW5500.readSnTX_WR(0);
-		//txlen = myW5500.writeSn(0,0x0040,data_ptr,len);
-		//myUART.usart_send_string(t);
-		myUART.usart_send_char(enc_out_state);
+		//uint16_t dst_ptr = myW5500.readSnTX_WR(0);
+		myUART.usart_send_string(t);
+		myW5500.send_data_processing(0,&data2,len2);
+		//myW5500.send_data_processing(0,&data2,len2);
+		myW5500.writeSnCR(0,Sock_SEND);
+		_delay_ms(10);
+		myUART.usart_send_char(len2);
+		if(myW5500.readSnIR(0)==myInterruptRegister.SEND_OK) myW5500.writeSnCR(0,Sock_CLOSE);
 			//*shiftReg |= (1<<7);
 			//*shiftReg = (*shiftReg>>1);
 	}
