@@ -1,14 +1,5 @@
 #include "cvsd.h"
 
-//void W5500Class::init(void)
-//{
-//	_delay_ms(1000);
-//	initSS();
-//	resetSS();
-//	SPCR |= _BV(MSTR);
-//	SPCR |= _BV(SPE);
-//}
-
 
 void W5500Class::init(void)
 {
@@ -22,7 +13,7 @@ void W5500Class::init(void)
 
     for (int i=0; i<MAX_SOCK_NUM; i++) {
         uint8_t cntl_byte = (0x0C + (i<<5));
-        write( 0x1E, cntl_byte, 2); //0x1E - Sn_RXBUF_SIZE
+        writeSn( 0x1E, cntl_byte, 2); //0x1E - Sn_RXBUF_SIZE
         write( 0x1F, cntl_byte, 2); //0x1F - Sn_TXBUF_SIZE
     }
 }
