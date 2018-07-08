@@ -56,6 +56,8 @@ uint16_t clock::getrate(){
 clock::~clock() {
 }
 
+//extern serial myUART;
+
 /* Die ISR erzeugt im Takt der genClock() Funktion an den Clockausgängen ein Rechtecksignal
  * Das Makro FX_ENC_DCLK toggled den Ausgang PD6 und den Ausgang PB4
  */
@@ -63,5 +65,10 @@ volatile uint8_t enc_out_state=0;
 
 ISR(TIMER1_COMPA_vect){
 	FX_ENC_DCLK;
-	enc_out_state = (PINB & (1 << PB7));
+//	uint8_t i;
+//	for(i = 0; i<8; i++){
+//		enc_out_state = (PINB & (1 << PB7));
+//		enc_out_state = enc_out_state << 1;
+//		if(i==7) i=0;
+//	}
 }
