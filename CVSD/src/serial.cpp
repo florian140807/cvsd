@@ -25,6 +25,15 @@ void serial::usart_send_string(char s[])
 		usart_send_char(s[i]);
 		i++;
 	}
+	usart_send_char('\r');
+	usart_send_char('\n');
+}
+
+void serial::usart_send_int(uint16_t val){
+	char t[10];
+	uint16_t tmp = val;
+	itoa(tmp,t,10);
+	usart_send_string(t);
 }
 
 

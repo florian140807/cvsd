@@ -35,7 +35,7 @@ class serial{
 	~serial();
 	void usart_send_char(char c);
 	void usart_send_string(char *str);
-	//void usart_write_P (const char *Buffer,...);
+	void usart_send_int(uint16_t val);
 	private:
 };
 //----------------------------------------------------------------------------
