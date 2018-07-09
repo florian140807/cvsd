@@ -7,6 +7,15 @@
 
 #include "cvsd.h"
 
+
+uint16_t ReadClkCntr = 0;
+uint16_t MrgCntr = 0;
+uint16_t TxClkCntr = 0;
+volatile uint8_t enc_out_state;
+volatile uint8_t bit_ready;
+volatile uint8_t byte_ready;
+volatile uint8_t packet_ready;
+
 uint16_t rate = 0;
 
 clock::clock() {
@@ -61,14 +70,32 @@ clock::~clock() {
 /* Die ISR erzeugt im Takt der genClock() Funktion an den Clockausgängen ein Rechtecksignal
  * Das Makro FX_ENC_DCLK toggled den Ausgang PD6 und den Ausgang PB4
  */
-volatile uint8_t enc_out_state=0;
 
 ISR(TIMER1_COMPA_vect){
-	FX_ENC_DCLK;
+	ReadClkCntr++;
+	TxClkCntr++;
+	MrgCntr++;
+	//FX_ENC_DCLK;
+	if(ReadClkCntr>=1){
+		FX_ENC_DCLK;
+		bit_ready = 1;
+		enc_out_state = (PINB & (1 << PB7));
+		enc_out_state = enc_out_state << 1;
+		ReadClkCntr = 0;
+	}
+	if(MrgCntr >= 8){
+		byte_ready = 1;
+		MrgCntr = 0;
+	}
+	if(TxClkCntr >= 64){
+		packet_ready = 1;
+		TxClkCntr = 0;
+	}
+
 //	uint8_t i;
 //	for(i = 0; i<8; i++){
 //		enc_out_state = (PINB & (1 << PB7));
-//		enc_out_state = enc_out_state << 1;
+//
 //		if(i==7) i=0;
 //	}
 }

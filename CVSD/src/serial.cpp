@@ -4,7 +4,6 @@
 serial::serial() {
 	UCSR1B |= (1 << RXEN1) | (1 << TXEN1);							//turn on rx and tx
 	UCSR1C |= (1 << UCSZ10) | (1 << UCSZ11);		//set data bits to 8
-
 	UBRR1H = (BAUD_PRESCALER >> 8);								//load upper 8 bits of baud value into high byte of UBBR
 	UBRR1L = (BAUD_PRESCALER);									//load lower 8 bits of baud value into high byte of UBBR
 }

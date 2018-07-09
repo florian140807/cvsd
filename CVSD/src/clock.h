@@ -8,8 +8,6 @@
 #ifndef _CLOCK_H
 #define _CLOCK_H
 
-#include "cvsd.h"
-
 
 
 class clock {

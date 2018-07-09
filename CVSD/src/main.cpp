@@ -7,16 +7,20 @@
  *      20180409: even more moved to online git
  */
 
+
+
 #include "cvsd.h"
 
-
+extern volatile uint8_t enc_out_state;
+extern volatile uint8_t bit_ready;
+extern volatile uint8_t byte_ready;
+extern volatile uint8_t packet_ready;
 
 int main(void){
 	PRR0 &= ~(1<<PRSPI);
 	DDRC = 0x80;		// Pin PC7 als Ausgang (LED) initialisieren
 	DDRB = 0x46;		// Pin PB6 als Ausgang initialisieren
 	DDRD = 0x40;		// Pin PD6 als Ausgang initialisieren
-
 	uint16_t freesize = 0;
 	uint8_t mac_addr[] = {0x90,0xA2,0xDA,0x11,0x34,0x30};
 	uint8_t ip_addr[] = {192,168,2,144};
@@ -54,6 +58,20 @@ int main(void){
 
 
 	while(1){
+		if(bit_ready){
+			TOGGLE_LED;
+		}
+		if(byte_ready){
+			//copy byte to next free tx buffer ptr
+			byte_ready = 0;
+			//inc tx buffer ptr
+		}
+		if(packet_ready){
+			//determine header time; Achtung: Zeit muss korrigiert werden auf den ersten Sample im Packet
+			//myW5500.writeSnCR(0,Sock_SEND);
+			packet_ready = 0;
+			//reset tx buffer ptr
+		}
 		//uint16_t dst_ptr = myW5500.readSnTX_WR(0);
 		myUART.usart_send_int(freesize);
 		myUART.usart_send_int(myW5500.readSnTX_WR(0));

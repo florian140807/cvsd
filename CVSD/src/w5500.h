@@ -10,7 +10,6 @@
 #ifndef	W5500_H_INCLUDED
 #define	W5500_H_INCLUDED
 
-#include "cvsd.h"
 
 #define MAX_SOCK_NUM 8
 typedef uint8_t SOCKET;

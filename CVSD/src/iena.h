@@ -8,7 +8,6 @@
 #ifndef SRC_IENA_H_
 #define SRC_IENA_H_
 
-#include "cvsd.h"
 
 class iena{
 public:
@@ -25,7 +24,7 @@ public:
 			uint16_t hdr_sequence;
 		}header;
 		uint16_t footer;
-		uint8_t payload;
+		uint16_t payload;
 //}iena_packet;
 };
 

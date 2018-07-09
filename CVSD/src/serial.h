@@ -25,9 +25,7 @@
 #ifndef _USART_H
 #define _USART_H
 
-//#define usart_write(format, args...)   usart_write_P(PSTR(format) , ## args)
 
-#include "cvsd.h"
 
 class serial{
 	public:
