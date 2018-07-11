@@ -78,17 +78,17 @@ ISR(TIMER1_COMPA_vect){
 	//FX_ENC_DCLK;
 	if(ReadClkCntr>=1){
 		FX_ENC_DCLK;
-		bit_ready;
+		bit_ready=1;
 		enc_out_state = (PINB & (1 << PB7));
 		enc_out_state = enc_out_state << 1;
 		ReadClkCntr = 0;
 	}
 	if(MrgCntr >= 8){
-		byte_ready;
+		byte_ready=1;
 		MrgCntr = 0;
 	}
 	if(TxClkCntr >= 64){
-		packet_ready;
+		packet_ready=1;
 		TxClkCntr = 0;
 	}
 

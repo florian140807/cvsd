@@ -33,7 +33,7 @@ int main(void){
 	uint16_t dstPort = 50001;
 	serial myUART;
 	iena myIENA;
-	clock myClock(16000);
+	clock myClock(64000);
 	W5500Class myW5500;
 	myW5500.init();
 	myW5500.writeMR(MR::RST);
@@ -58,43 +58,49 @@ int main(void){
 
 	sei();
 
-	myW5500.send_data_processing(0,(uint8_t *) &myIENA.header,sizeof(myIENA.header));
 	myUART.usart_send_int(myW5500.readSnTX_WR(0));
 
 
 
 
 	while(1){
-		if(bit_ready){
-			TOGGLE_LED;
-			bit_ready=0;
-		}
+		//myW5500.send_data_processing(0,(uint8_t *) &myIENA.header,sizeof(myIENA.header));
+//		if(bit_ready){
+//			TOGGLE_LED;
+//			bit_ready=0;
+//			//myW5500.send_data_processing(0,(uint8_t *) myW5500.readSnTX_WR(0),sizeof(myW5500.readSnTX_WR(0)));
+//			//myW5500.writeSnCR(0,Sock_SEND);
+//		}
 		if(byte_ready){
-			dst_ptr = myW5500.readSnTX_WR(0);
-			myW5500.send_data_processing(0,(uint8_t *) ip_addr,sizeof(ip_addr));
-			myUART.usart_send_int(myW5500.readSnTX_WR(0));
-			dst_ptr++;
+			myW5500.send_data_processing(0,(uint8_t *) dstPort,sizeof(dstPort));
+			myW5500.writeSnCR(0,Sock_SEND);
+			//dst_ptr = myW5500.readSnTX_WR(0);
+			//myW5500.send_data_processing(0,(uint8_t *) ip_addr,sizeof(ip_addr));
+			//myUART.usart_send_int(myW5500.readSnTX_WR(0));
+			//dst_ptr++;
 			//copy byte to next free tx buffer ptr
 			byte_ready = 0;
 			//inc tx buffer ptr
 		}
-		if(packet_ready){
-			//determine header time; Achtung: Zeit muss korrigiert werden auf den ersten Sample im Packet
-			myW5500.writeSnCR(0,Sock_SEND);
-			packet_ready = 0;
-			dst_ptr=0;
-		}
+//		if(packet_ready){
+//			//myW5500.send_data_processing(0,(uint8_t *) myW5500.readSnTX_WR(0),sizeof(myW5500.readSnTX_WR(0)));
+//			//myW5500.writeSnCR(0,Sock_SEND);
+//			//determine header time; Achtung: Zeit muss korrigiert werden auf den ersten Sample im Packet
+//			//myW5500.writeSnCR(0,Sock_SEND);
+//			packet_ready = 0;
+//			//dst_ptr=0;
+//		}
 		//uint16_t dst_ptr = myW5500.readSnTX_WR(0);
-		myUART.usart_send_int(freesize);
-		myUART.usart_send_int(myW5500.readSnTX_WR(0));
+		//myUART.usart_send_int(freesize);
+		//myUART.usart_send_int(myW5500.readSnTX_WR(0));
 		//myW5500.send_data_processing(0,(uint8_t *) ip_addr,sizeof(ip_addr));
 		//myW5500.send_data_processing(0,(uint8_t *) &myIENA.header,sizeof(myIENA.header));
 		//myW5500.writeSnCR(0,Sock_SEND);
-		_delay_ms(100);
+		//_delay_ms(100);
 		//myIENA.header.hdr_sequence++;
 		//myIENA.header.hdr_time++;
 		//if(myW5500.readSnIR(0)==SnIR::SEND_OK) myW5500.writeSnCR(0,Sock_CLOSE);
-		myUART.usart_send_int(myW5500.readSnTX_RD(0));
+		//myUART.usart_send_int(myW5500.readSnTX_RD(0));
 		//myUART.usart_send_int((uint16_t) enc_out_state);
 	}
 	return(0);
