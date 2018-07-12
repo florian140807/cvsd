@@ -16,6 +16,10 @@
 #define FX_ENC_DCLK (PORTD ^= _BV(6))				// FX609 Encoder Data Clock (5), ATMEGA32u4 PD6 (IO12)
 #define W5500_CDS (PORTB &= ~(1<<PORTB6))		// W5500 Chip De-Select (Low active)
 #define W5500_CS (PORTB |= (1<<PORTB6))		// W5500 Chip Select
+#define TOGGLE1 (PORTC ^= _BV(6))			//Pin PC6 for first Interrupt Counter Indication
+#define TOGGLE2 (PORTD ^= _BV(7))			//Pin PD7 for second Interrupt Counter Indication
+#define TOGGLE3 (PORTE ^= _BV(6))			//Pin PE6 for second Interrupt Counter Indication
+#define PAYLOADSTARTPTR 0x000A				//here starts the IENA payload data in the SnTX Buffer
 
 
 #include <stdio.h>
