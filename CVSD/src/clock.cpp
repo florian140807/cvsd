@@ -13,7 +13,6 @@ uint16_t MrgCntr = 0;
 uint16_t TxClkCntr = 0;
 uint16_t cntr = 0;
 volatile uint8_t bit_ready;
-volatile uint8_t enc_out_state;
 volatile uint8_t byte_ready;
 volatile uint8_t packet_ready;
 
