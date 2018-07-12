@@ -9,12 +9,12 @@
 #include "cvsd.h"
 
 iena::iena(){
-	header.hdr_key = 0xAAAA;
-	header.hdr_time = 0;
-	header.hdr_size = 0;
-	header.hdr_status = 0;
-	header.hdr_n2status =0;
-	header.hdr_sequence =0;
+	header.hdr_key = 0x1111;
+	header.hdr_size = 0x2222;
+	header.hdr_time = 0x3333;
+	header.hdr_status = 0x44;
+	header.hdr_n2status =0x55;
+	header.hdr_sequence =0x6666;
 	footer = 0xDEAD;
 	payload = 0xCAFE;
 }
