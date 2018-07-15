@@ -12,9 +12,12 @@ uint16_t ReadClkCntr = 0;
 uint16_t MrgCntr = 0;
 uint16_t TxClkCntr = 0;
 uint16_t cntr = 0;
-volatile uint8_t bit_ready;
-volatile uint8_t byte_ready;
-volatile uint8_t packet_ready;
+//volatile enum {bit_ready, byte_ready, packet_ready} ready_state;
+//volatile bool bit_ready;
+//volatile bool byte_ready;
+//volatile bool packet_ready;
+volatile uint8_t ready_state;
+
 
 uint16_t rate = 0;
 
@@ -77,21 +80,21 @@ ISR(TIMER1_COMPA_vect){
 	MrgCntr++;
 	switch(ReadClkCntr){
 	case 1:
-		bit_ready=1;
+		ready_state=1;
 		ReadClkCntr = 0;
 		break;
 	default:break;
 	}
 	switch(MrgCntr){
 	case 8:
-		byte_ready=1;
+		ready_state=2;
 		MrgCntr = 0;
 		break;
 	default:break;
 	}
 	switch(TxClkCntr){
 	case 64:
-		packet_ready=1;
+		ready_state=3;
 		TxClkCntr = 0;
 		break;
 	default:break;
