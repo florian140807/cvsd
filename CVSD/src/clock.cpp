@@ -75,28 +75,7 @@ clock::~clock() {
  */
 
 ISR(TIMER1_COMPA_vect){
-	ReadClkCntr++;
-	TxClkCntr++;
-	MrgCntr++;
-	switch(ReadClkCntr){
-	case 1:
 		ready_state=1;
-		ReadClkCntr = 0;
-		break;
-	default:break;
-	}
-	switch(MrgCntr){
-	case 8:
-		ready_state=2;
-		MrgCntr = 0;
-		break;
-	default:break;
-	}
-	switch(TxClkCntr){
-	case 64:
-		ready_state=3;
-		TxClkCntr = 0;
-		break;
-	default:break;
-	}
+		TOGGLE1;
+		FX_ENC_DCLK;
 }
