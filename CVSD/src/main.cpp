@@ -79,6 +79,7 @@ int main(void){
 		case 1:
 			NewValAvailable = 0;
 			enc_byte = (enc_out_state << 1);
+			//FIXME shift function does not work as expected
 			StaleBit = 0;
 			ShiftCtr ++;
 			break;
