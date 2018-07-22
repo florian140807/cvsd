@@ -10,6 +10,7 @@ void W5500Class::init(void)
     //SPI.begin();
     SPCR |= _BV(MSTR);
     SPCR |= _BV(SPE);
+    SPSR |= _BV(SPI2X);
 
     for (int i=0; i<MAX_SOCK_NUM; i++) {
         uint8_t cntl_byte = (0x0C + (i<<5));
