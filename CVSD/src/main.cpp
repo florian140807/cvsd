@@ -13,7 +13,6 @@
 
 extern volatile uint8_t ready_state;
 
-
 int main(void){
 	PRR0 &= ~(1<<PRSPI);
 	DDRC = 0xC0;		// Pin PC7 und PC6 als Ausgang (LED) initialisieren
@@ -63,6 +62,7 @@ int main(void){
 	bool NewValAvailable = 0;
 	bool StaleBit = 0;
 	uint8_t ShiftCtr = 0;
+	uint16_t TxBufCtr = 0;
 
 
 	while(1){
@@ -78,8 +78,7 @@ int main(void){
 		switch(NewValAvailable){
 		case 1:
 			NewValAvailable = 0;
-			enc_byte = (enc_out_state << 1);
-			//FIXME shift function does not work as expected
+			enc_byte = ((enc_byte << 1)|enc_out_state);
 			StaleBit = 0;
 			ShiftCtr ++;
 			break;
@@ -90,10 +89,21 @@ int main(void){
 		}
 		switch(ShiftCtr){
 		case 7:
-			myW5500.send_data_processing_offset(0,dst_ptr,(uint8_t *) enc_byte,sizeof(enc_byte));
+			myW5500.send_data_processing_offset(0,dst_ptr, &enc_byte,sizeof(enc_byte));
 			dst_ptr++;
 			ShiftCtr=0;
+			TOGGLE2;
+			//myW5500.writeSnCR(0,Sock_SEND);
+			break;
+		default:break;
+		}
+		switch(dst_ptr){
+		case 256:
+			//FIXME: correct offset, take into account correct iena header size
+			myW5500.send_data_processing_offset(0,dst_ptr,(uint8_t *) &myIENA.footer,sizeof(myIENA.footer));
 			myW5500.writeSnCR(0,Sock_SEND);
+			dst_ptr = PAYLOADSTARTPTR;
+			TOGGLE3;
 			break;
 		default:break;
 		}
@@ -104,7 +114,7 @@ int main(void){
 		//myW5500.send_data_processing(0,(uint8_t *) ip_addr,sizeof(ip_addr));
 		//myW5500.send_data_processing(0,(uint8_t *) &myIENA.header,sizeof(myIENA.header));
 		//myW5500.writeSnCR(0,Sock_SEND);
-		dst_ptr = PAYLOADSTARTPTR;
+		//dst_ptr = PAYLOADSTARTPTR;
 		//_delay_ms(100);
 		//myIENA.header.hdr_sequence++;
 		//myIENA.header.hdr_time++;
