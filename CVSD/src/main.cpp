@@ -70,7 +70,7 @@ int main(void){
 		switch(ready_state){
 		case 1:
 			ready_state=0;
-			enc_out_state = (PINB & (1 << PB7));
+			enc_out_state = (PINB & (1 << FX_ENC_OUT));
 			NewValAvailable = 1;
 			break;
 		default:break;
