@@ -15,7 +15,7 @@ iena::iena(){
 	header.hdr_status = 0x44;
 	header.hdr_n2status =0x55;
 	header.hdr_sequence =0x6666;
-	footer = 0xDEAD;
+	footer = 0xADDE;
 	payload = 0xCAFE;
 }
 
