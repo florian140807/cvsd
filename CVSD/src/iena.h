@@ -18,7 +18,7 @@ public:
 		struct iena_header{
 			uint16_t hdr_key;
 			uint16_t hdr_size;
-			uint16_t hdr_time;
+			uint16_t hdr_time[3];
 			uint8_t hdr_status;
 			uint8_t hdr_n2status;
 			uint16_t hdr_sequence;
