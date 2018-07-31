@@ -13,6 +13,7 @@
 
 extern volatile uint8_t ready_state;
 
+
 int main(void){
 	PRR0 &= ~(1<<PRSPI);
 	DDRC = 0xC0;		// Pin PC7 und PC6 als Ausgang (LED) initialisieren
@@ -41,31 +42,22 @@ int main(void){
 	myW5500.writeSIPR(ip_addr);
 	myW5500.writeSUBR(sub_mask);
 
-
-
 	while(myW5500.readSnSR(0)!=SnSR::UDP){
 		myW5500.writeSnMR(0,SnMR::UDP);
 		myW5500.writeSnPORT(0,sPort);
 		myW5500.writeSnCR(0,Sock_OPEN);
 	}
-	//myW5500.writeSnCR(0,Sock_CLOSE);
-
 	freesize = myW5500.getTXFreeSize(0);
 	while(freesize < sizeof(myIENA.header)) freesize = myW5500.readSnTX_FSR(0);
 	myW5500.writeSnDIPR(0,remote_ip);
 	myW5500.writeSnDPORT(0,dstPort);
 
 	sei();
-
-	//myUART.usart_send_int(myW5500.readSnTX_WR(0));
-
 	bool NewValAvailable = 0;
 	bool StaleBit = 0;
 	uint8_t ShiftCtr = 0;
-	uint16_t TxBufCtr = 0;
-
-
 	while(1){
+		//FIXME: update IENA Header Time
 		myW5500.send_data_processing(0,(uint8_t *) &myIENA.header,sizeof(myIENA.header));
 		switch(ready_state){
 		case 1:
@@ -93,36 +85,25 @@ int main(void){
 			dst_ptr++;
 			ShiftCtr=0;
 			TOGGLE2;
-			//myW5500.writeSnCR(0,Sock_SEND);
 			break;
 		default:break;
 		}
 		switch(dst_ptr){
-		case 256:
+		case (BYTESPERPACKET+PAYLOADSTARTPTR):
 			//FIXME: correct offset, take into account correct iena header size
 			myW5500.send_data_processing_offset(0,dst_ptr,(uint8_t *) &myIENA.footer,sizeof(myIENA.footer));
 			myW5500.writeSnCR(0,Sock_SEND);
 			dst_ptr = PAYLOADSTARTPTR;
+			myIENA.header.hdr_sequence= (myIENA.header.hdr_sequence>>8)|((myIENA.header.hdr_sequence&0xff)<<8);
+			myIENA.header.hdr_sequence++;
+			myIENA.header.hdr_sequence= (myIENA.header.hdr_sequence>>8)|((myIENA.header.hdr_sequence&0xff)<<8);
 			TOGGLE3;
 			break;
 		default:break;
 		}
-		//uint16_t dst_ptr = myW5500.readSnTX_WR(0);
-		//freesize = myW5500.getTXFreeSize(0);
-		//myUART.usart_send_int(freesize);
-		//myUART.usart_send_int(myW5500.readSnTX_WR(0));
-		//myW5500.send_data_processing(0,(uint8_t *) ip_addr,sizeof(ip_addr));
-		//myW5500.send_data_processing(0,(uint8_t *) &myIENA.header,sizeof(myIENA.header));
-		//myW5500.writeSnCR(0,Sock_SEND);
-		//dst_ptr = PAYLOADSTARTPTR;
-		//_delay_ms(100);
-		//myIENA.header.hdr_sequence++;
-		//myIENA.header.hdr_time++;
-		//if(myW5500.readSnIR(0)==SnIR::SEND_OK) myW5500.writeSnCR(0,Sock_CLOSE);
-		//myUART.usart_send_int(myW5500.readSnTX_RD(0));
-		//myUART.usart_send_int((uint16_t) enc_byte);
 	}
 	return(0);
 }
+
 
 
