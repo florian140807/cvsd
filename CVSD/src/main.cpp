@@ -90,7 +90,6 @@ int main(void){
 		}
 		switch(dst_ptr){
 		case (BYTESPERPACKET+PAYLOADSTARTPTR):
-			//FIXME: correct offset, take into account correct iena header size
 			myW5500.send_data_processing_offset(0,dst_ptr,(uint8_t *) &myIENA.footer,sizeof(myIENA.footer));
 			myW5500.writeSnCR(0,Sock_SEND);
 			dst_ptr = PAYLOADSTARTPTR;
