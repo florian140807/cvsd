@@ -19,7 +19,13 @@
 #define TOGGLE1 (PORTC ^= _BV(6))			//Pin PC6 for first Interrupt Counter Indication
 #define TOGGLE2 (PORTD ^= _BV(7))			//Pin PD7 for second Interrupt Counter Indication
 #define TOGGLE3 (PORTE ^= _BV(6))			//Pin PE6 for second Interrupt Counter Indication
-#define PAYLOADSTARTPTR 0x000A				//here starts the IENA payload data in the SnTX Buffer
+#define BYTESPERPACKET 256					//define how many cvsd bytes/packet should be packetized
+#define IENAHEADERSIZE 14					//IENA Header contains 14 bytes
+#define PAYLOADSTARTPTR 0+IENAHEADERSIZE	//there are 14 bytes of IENA header, hence the IENA payload data starts in the SnTX Buffer
+#define IENAFOOTERSIZE 2					//nums of byte of IENAFOOTER
+#define a (BYTESPERPACKET+IENAHEADERSIZE+IENAFOOTERSIZE)/2 //the value Size in the IENA Header is in words, hence divided by 2
+#define IENAHEADERSIZEVALUE (a>>8)|((a&0xff)<<8) //doing byte swapping
+#define IENAFOOTERVALUE 0xADDE				//keep in mind Endianess swapping
 
 
 
@@ -39,6 +45,7 @@
 #include "clock.h"
 #include "w5500.h"
 #include "iena.h"
+
 
 
 
