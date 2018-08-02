@@ -57,28 +57,31 @@ int main(void){
 	bool StaleBit = 0;
 	uint8_t ShiftCtr = 0;
 	while(1){
+
 		//FIXME: update IENA Header Time
-		myW5500.send_data_processing(0,(uint8_t *) &myIENA.header,sizeof(myIENA.header));
 		switch(ready_state){
 		case 1:
 			ready_state=0;
 			enc_out_state = (PINB & (1 << FX_ENC_OUT));
-			NewValAvailable = 1;
-			break;
-		default:break;
-		}
-		switch(NewValAvailable){
-		case 1:
-			NewValAvailable = 0;
+			TOGGLE1;
 			enc_byte = ((enc_byte << 1)|enc_out_state);
-			StaleBit = 0;
 			ShiftCtr ++;
-			break;
-		case 0:
-			StaleBit = 1;
+			//NewValAvailable = 1;
 			break;
 		default:break;
 		}
+//		switch(NewValAvailable){
+//		case 1:
+//			NewValAvailable = 0;
+//			enc_byte = ((enc_byte << 1)|enc_out_state);
+//			StaleBit = 0;
+//			ShiftCtr ++;
+//			break;
+//		case 0:
+//			StaleBit = 1;
+//			break;
+//		default:break;
+//		}
 		switch(ShiftCtr){
 		case 7:
 			myW5500.send_data_processing_offset(0,dst_ptr, &enc_byte,sizeof(enc_byte));
@@ -90,6 +93,7 @@ int main(void){
 		}
 		switch(dst_ptr){
 		case (BYTESPERPACKET+PAYLOADSTARTPTR):
+			myW5500.send_data_processing(0,(uint8_t *) &myIENA.header,sizeof(myIENA.header));
 			myW5500.send_data_processing_offset(0,dst_ptr,(uint8_t *) &myIENA.footer,sizeof(myIENA.footer));
 			myW5500.writeSnCR(0,Sock_SEND);
 			dst_ptr = PAYLOADSTARTPTR;
