@@ -76,6 +76,5 @@ clock::~clock() {
 
 ISR(TIMER1_COMPA_vect){
 		ready_state=1;
-		TOGGLE1;
 		FX_ENC_DCLK;
 }
