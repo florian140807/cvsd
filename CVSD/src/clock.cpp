@@ -32,25 +32,25 @@ clock::clock() {
 clock::clock(uint16_t _rate){
 	switch (_rate){
 		case 16000:
-			OCR1A = 0x1F3;				/**< Offsetwert laden: 16e6 / Prescaler / OCRA = 16e3 Hz */
+			OCR1A = 0x3E7;				/**< Offsetwert laden: 16e6 / Prescaler / OCRA = 16e3 Hz */
 			TCCR1B |= (1<<WGM12);		/**< Clear Timer on Compare */
 			TIMSK1 |= (1<<OCIE1A);		/**< enable interrupt */
 			TCCR1B |= (1<<CS10);
 			break;
 		case 32000:
-			OCR1A = 0x0F9;				/**< Offsetwert laden: 16e6 / Prescaler / OCRA = 32e3 Hz */
+			OCR1A = 0x1F3;				/**< Offsetwert laden: 16e6 / Prescaler / OCRA = 32e3 Hz */
 			TCCR1B |= (1<<WGM12);		/**< Clear Timer on Compare */
 			TIMSK1 |= (1<<OCIE1A);		/**< enable interrupt */
 			TCCR1B |= (1<<CS10);
 			break;
 		case 64000:
-			OCR1A = 0x07C;				/**< Offsetwert laden: 16e6 / Prescaler / OCRA = 64e3 Hz */
+			OCR1A = 0x0F9;				/**< Offsetwert laden: 16e6 / Prescaler / OCRA = 64e3 Hz */
 			TCCR1B |= (1<<WGM12);		/**< Clear Timer on Compare */
 			TIMSK1 |= (1<<OCIE1A);		/**< enable interrupt */
 			TCCR1B |= (1<<CS10);
 			break;
 		default:
-			OCR1A = 0x1F3;				/**< Offsetwert laden: 16e6 / Prescaler / OCRA = 16e3 Hz */
+			OCR1A = 0x3E7;				/**< Offsetwert laden: 16e6 / Prescaler / OCRA = 16e3 Hz */
 			TCCR1B |= (1<<WGM12);		/**< Clear Timer on Compare */
 			TIMSK1 |= (1<<OCIE1A);		/**< enable interrupt */
 			TCCR1B |= (1<<CS10);
@@ -76,5 +76,6 @@ clock::~clock() {
 
 ISR(TIMER1_COMPA_vect){
 		ready_state=1;
+		TOGGLE1;
 		FX_ENC_DCLK;
 }
