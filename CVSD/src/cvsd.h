@@ -19,7 +19,7 @@
 #define TOGGLE1 (PORTC ^= _BV(6))			//Pin PC6 for first Interrupt Counter Indication
 #define TOGGLE2 (PORTD ^= _BV(7))			//Pin PD7 for second Interrupt Counter Indication
 #define TOGGLE3 (PORTE ^= _BV(6))			//Pin PE6 for second Interrupt Counter Indication
-#define BYTESPERPACKET 8					//define how many cvsd bytes/packet should be packetized
+#define BYTESPERPACKET 256					//define how many cvsd bytes/packet should be packetized
 #define IENAHEADERSIZE 14					//IENA Header contains 14 bytes
 #define PAYLOADSTARTPTR 0+IENAHEADERSIZE	//there are 14 bytes of IENA header, hence the IENA payload data starts in the SnTX Buffer
 #define IENAFOOTERSIZE 2					//nums of byte of IENAFOOTER

@@ -52,6 +52,11 @@ int main(void){
 	myW5500.writeSnDIPR(0,remote_ip);
 	myW5500.writeSnDPORT(0,dstPort);
 
+	myW5500.send_data_processing(0,(uint8_t *) &myIENA.header,sizeof(myIENA.header));
+	myW5500.send_data_processing_offset(0,dst_ptr,(uint8_t *) &myIENA.footer,sizeof(myIENA.footer));
+
+
+
 	sei();
 	bool NewValAvailable = 0;
 	bool StaleBit = 0;
@@ -94,8 +99,6 @@ int main(void){
 		}
 		switch(ByteCtr){
 		case (BYTESPERPACKET):
-			myW5500.send_data_processing(0,(uint8_t *) &myIENA.header,sizeof(myIENA.header));
-			myW5500.send_data_processing_offset(0,dst_ptr,(uint8_t *) &myIENA.footer,sizeof(myIENA.footer));
 			myW5500.writeSnCR(0,Sock_SEND);
 			dst_ptr = PAYLOADSTARTPTR;
 			myIENA.header.hdr_sequence= (myIENA.header.hdr_sequence>>8)|((myIENA.header.hdr_sequence&0xff)<<8);
