@@ -8,11 +8,9 @@
  */
 
 
-
 #include "cvsd.h"
 
 extern volatile uint8_t ready_state;
-
 
 int main(void){
 	PRR0 &= ~(1<<PRSPI);
@@ -33,7 +31,7 @@ int main(void){
 	uint16_t dstPort = 50001;
 	serial myUART;
 	iena myIENA;
-	clock myClock(8000);
+	clock myClock(64000);
 	W5500Class myW5500;
 	myW5500.init();
 	myW5500.writeMR(MR::RST);
@@ -52,22 +50,18 @@ int main(void){
 	myW5500.writeSnDIPR(0,remote_ip);
 	myW5500.writeSnDPORT(0,dstPort);
 
-	myW5500.send_data_processing(0,(uint8_t *) &myIENA.header,sizeof(myIENA.header));
-	myW5500.send_data_processing_offset(0,dst_ptr,(uint8_t *) &myIENA.footer,sizeof(myIENA.footer));
-
-
-
 	sei();
-	bool NewValAvailable = 0;
-	bool StaleBit = 0;
+
 	uint8_t ShiftCtr = 0;
-	uint8_t ByteCtr = 0;
+	uint16_t ByteCtr = 0;
 	while(1){
+		FX_DENC_DCLK;
+		//ready_state=0;
 		//FIXME: update IENA Header Time
 		switch(ready_state){
 		case 1:
 			enc_out_state = (PINB & (1 << FX_ENC_OUT));
-			TOGGLE1;
+			//TOGGLE1;
 			enc_byte = ((enc_byte << 1)|enc_out_state);
 			ShiftCtr++;
 			ready_state=0;
@@ -89,23 +83,28 @@ int main(void){
 //		}
 		switch(ShiftCtr){
 		case 7:
+			TOGGLE2;
 			myW5500.send_data_processing_offset(0,dst_ptr, &enc_byte,sizeof(enc_byte));
+			//TOGGLE3;
 			dst_ptr++;
 			ByteCtr++;
 			ShiftCtr=0;
-			TOGGLE2;
+			//TOGGLE3;
 			break;
 		default:break;
 		}
 		switch(ByteCtr){
-		case (BYTESPERPACKET):
+		case (BYTESPERPACKET-1):
+			TOGGLE3;
+			myW5500.send_data_processing(0,(uint8_t *) &myIENA.header,sizeof(myIENA.header));
+			myW5500.send_data_processing_offset(0,IENAFOOTERSTARTPTR,(uint8_t *) &myIENA.footer,sizeof(myIENA.footer));
 			myW5500.writeSnCR(0,Sock_SEND);
 			dst_ptr = PAYLOADSTARTPTR;
 			myIENA.header.hdr_sequence= (myIENA.header.hdr_sequence>>8)|((myIENA.header.hdr_sequence&0xff)<<8);
 			myIENA.header.hdr_sequence++;
 			myIENA.header.hdr_sequence= (myIENA.header.hdr_sequence>>8)|((myIENA.header.hdr_sequence&0xff)<<8);
-			TOGGLE3;
 			ByteCtr=0;
+			//TOGGLE3;
 			break;
 		default:break;
 		}
