@@ -23,7 +23,7 @@
 #define TOGGLE1 (PORTC ^= _BV(6))			//Pin PC6 for first Interrupt Counter Indication
 #define TOGGLE2 (PORTD ^= _BV(7))			//Pin PD7 for second Interrupt Counter Indication
 #define TOGGLE3 (PORTC ^= _BV(7))			//Pin PC7 for second Interrupt Counter Indication
-#define BYTESPERPACKET 256					//define how many cvsd bytes/packet should be packetized
+#define BYTESPERPACKET 1024					//define how many cvsd bytes/packet should be packetized
 #define IENAHEADERSIZE 14					//IENA Header contains 14 bytes
 #define IENAFOOTERSIZE 2					//nums of byte of IENAFOOTER
 
