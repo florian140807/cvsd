@@ -13,10 +13,7 @@
 #define BAUD_PRESCALER	(((F_CPU / (BAUDRATE * 16UL)))-1)
 #define TOGGLE_LED (PORTC ^= _BV(7)) //TOGGLE_MAKRO for Debugging PC7
 #define FX_ENC_OUT 5				// FX609 Encoder Ouptut (6), ATMEGA32u4 PB5 (IO9)
-//#define FX_ENC_DCLK (PORTD ^= _BV(6))				// FX609 Encoder Data Clock (5), ATMEGA32u4 PD6 (IO12)
-
-#define FX_ENC_DCLK (PORTD |= (1<<PORTD6))				// FX609 Encoder Data Clock (5), ATMEGA32u4 PD6 (IO12)
-#define FX_DENC_DCLK (PORTD &= ~(1<<PORTD6))				// FX609 Encoder Data Clock (5), ATMEGA32u4 PD6 (IO12)
+#define FX_ENC_DCLK (PORTD ^= _BV(6))				// FX609 Encoder Data Clock (5), ATMEGA32u4 PD6 (IO12)
 
 #define W5500_CDS (PORTB &= ~(1<<PORTB6))		// W5500 Chip De-Select (Low active)
 #define W5500_CS (PORTB |= (1<<PORTB6))		// W5500 Chip Select
@@ -36,10 +33,6 @@
 #define a (BYTESPERPACKET+IENAHEADERSIZE+IENAFOOTERSIZE)/2 //the value Size in the IENA Header is in words, hence divided by 2
 #define IENAHEADERSIZEVALUE (a>>8)|((a&0xff)<<8) //doing byte swapping
 #define IENAFOOTERVALUE 0xADDE				//keep in mind Endianess swapping
-
-
-
-
 
 #include "avr/io.h"
 #include <stdio.h>

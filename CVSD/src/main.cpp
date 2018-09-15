@@ -55,7 +55,7 @@ int main(void){
 	uint8_t ShiftCtr = 0;
 	uint16_t ByteCtr = 0;
 	while(1){
-		FX_DENC_DCLK;
+		//FX_DENC_DCLK;
 		//ready_state=0;
 		//FIXME: update IENA Header Time
 		switch(ready_state){
