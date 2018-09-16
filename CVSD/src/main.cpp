@@ -87,7 +87,7 @@ int main(void){
 				//TOGGLE2;
 				enc_byte[0] = enc_word & 0x00FF;
 				enc_byte[1] = (enc_word & 0xFF00)>>8;
-				myW5500.send_data_processing_offset(0,dst_ptr, enc_byte,length);
+				myW5500.send_data_processing_offset(0,dst_ptr, enc_byte ,sizeof(enc_byte));
 				//TOGGLE3;
 				dst_ptr++;
 				ByteCtr++;
