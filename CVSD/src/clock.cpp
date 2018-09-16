@@ -16,7 +16,10 @@ uint16_t cntr = 0;
 //volatile bool bit_ready;
 //volatile bool byte_ready;
 //volatile bool packet_ready;
-volatile uint8_t ready_state;
+volatile bool bReady=0;
+volatile bool bSkip=0;
+volatile bool bStale=0;
+volatile bool bProcessed=0;
 
 
 uint16_t rate = 0;
@@ -32,25 +35,25 @@ clock::clock() {
 clock::clock(uint16_t _rate){
 	switch (_rate){
 		case 16000:
-			OCR1A = 0x3E7;				/**< Offsetwert laden: 16e6 / Prescaler / OCRA = 16e3 Hz */
+			OCR1A = 0x1F3;				/**< Offsetwert laden: 16e6 / Prescaler / OCRA = 16e3 Hz */
 			TCCR1B |= (1<<WGM12);		/**< Clear Timer on Compare */
 			TIMSK1 |= (1<<OCIE1A);		/**< enable interrupt */
 			TCCR1B |= (1<<CS10);
 			break;
 		case 32000:
-			OCR1A = 0x1F3;				/**< Offsetwert laden: 16e6 / Prescaler / OCRA = 32e3 Hz */
+			OCR1A = 0x0F9;				/**< Offsetwert laden: 16e6 / Prescaler / OCRA = 32e3 Hz */
 			TCCR1B |= (1<<WGM12);		/**< Clear Timer on Compare */
 			TIMSK1 |= (1<<OCIE1A);		/**< enable interrupt */
 			TCCR1B |= (1<<CS10);
 			break;
 		case 64000:
-			OCR1A = 0x0F9;				/**< Offsetwert laden: 16e6 / Prescaler / OCRA = 64e3 Hz */
+			OCR1A = 0x07C;				/**< Offsetwert laden: 16e6 / Prescaler / OCRA = 64e3 Hz */
 			TCCR1B |= (1<<WGM12);		/**< Clear Timer on Compare */
 			TIMSK1 |= (1<<OCIE1A);		/**< enable interrupt */
 			TCCR1B |= (1<<CS10);
 			break;
 		default:
-			OCR1A = 0x3E7;				/**< Offsetwert laden: 16e6 / Prescaler / OCRA = 16e3 Hz */
+			OCR1A = 0x1F3;				/**< Offsetwert laden: 16e6 / Prescaler / OCRA = 16e3 Hz */
 			TCCR1B |= (1<<WGM12);		/**< Clear Timer on Compare */
 			TIMSK1 |= (1<<OCIE1A);		/**< enable interrupt */
 			TCCR1B |= (1<<CS10);
@@ -75,7 +78,24 @@ clock::~clock() {
  */
 
 ISR(TIMER1_COMPA_vect){
-		ready_state=1;
-		TOGGLE1;
-		FX_ENC_DCLK;
-}
+	RESETSTALE;
+	switch(bProcessed){
+	case 0:
+		bSkip = 1;
+		SETSKIP;
+		break;
+	case 1:
+		bSkip=0;
+		RESETSKIP;
+		break;
+	}
+	bReady ^= 1;
+	FX_ENC_DCLK;
+	//SETFX_ENC_DCLK;
+//	switch(rate){
+//	case 64000:break;
+//	case 32000:_delay_us(15); break;
+//	case 16000:_delay_us(45); break;
+//	default: break;
+//	}
+	}
