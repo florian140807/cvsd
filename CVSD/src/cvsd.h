@@ -15,11 +15,22 @@
 #define FX_ENC_OUT 5				// FX609 Encoder Ouptut (6), ATMEGA32u4 PB5 (IO9)
 #define FX_ENC_DCLK (PORTD ^= _BV(6))				// FX609 Encoder Data Clock (5), ATMEGA32u4 PD6 (IO12)
 
-#define W5500_CDS (PORTB &= ~(1<<PORTB6))		// W5500 Chip De-Select (Low active)
-#define W5500_CS (PORTB |= (1<<PORTB6))		// W5500 Chip Select
-#define TOGGLE1 (PORTC ^= _BV(6))			//Pin PC6 for first Interrupt Counter Indication
-#define TOGGLE2 (PORTD ^= _BV(7))			//Pin PD7 for second Interrupt Counter Indication
-#define TOGGLE3 (PORTC ^= _BV(7))			//Pin PC7 for second Interrupt Counter Indication
+//#define SETFX_ENC_DCLK (PORTD |= _BV(6))				// set FX609 Encoder Data Clock (5), ATMEGA32u4 PD6 (IO12)
+//#define RESETFX_ENC_DCLK (PORTD &= ~(_BV(6)))				// reset FX609 Encoder Data Clock (5), ATMEGA32u4 PD6 (IO12)
+
+
+#define W5500_CDS (PORTB &= ~(_BV(6)))		// W5500 Chip De-Select (Low active)
+#define W5500_CS (PORTB |= _BV(6))		// W5500 Chip Select
+//#define TOGGLE1 (PORTC ^= _BV(6))			//Pin PC6 for first Interrupt Counter Indication
+#define SETSKIP (PORTC |= _BV(6))			//set Pin PC6 for Skip Indication
+#define RESETSKIP (PORTC &= ~(_BV(6)))			//reset Pin PC6 for Skip Indication
+
+//#define TOGGLE2 (PORTD ^= _BV(7))			//Pin PD7 for second Interrupt Counter Indication
+
+#define SETSTALE (PORTD |= _BV(7))			//set Pin PD7 for Stale Indication
+#define RESETSTALE (PORTD &= ~(_BV(7)))			//reset Pin PD7 for Stale Indication
+
+//#define TOGGLE3 (PORTC ^= _BV(7))			//Pin PC7 for second Interrupt Counter Indication
 #define BYTESPERPACKET 1024					//define how many cvsd bytes/packet should be packetized
 #define IENAHEADERSIZE 14					//IENA Header contains 14 bytes
 #define IENAFOOTERSIZE 2					//nums of byte of IENAFOOTER
