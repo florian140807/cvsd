@@ -10,7 +10,10 @@
 
 #include "cvsd.h"
 
-extern volatile uint8_t ready_state;
+extern volatile bool bReady;
+extern volatile bool bSkip;
+extern volatile bool bStale;
+extern volatile bool bProcessed;
 
 int main(void){
 	PRR0 &= ~(1<<PRSPI);
@@ -19,7 +22,8 @@ int main(void){
 	DDRD = 0xC0;		// Pin PD7 und PD6 als Ausgang initialisieren
 	DDRE = 0x40;		// Pin PE6 als Ausgang initialisieren
 	bool enc_out_state =0;
-	uint8_t enc_byte=0;
+	uint8_t enc_byte[2];
+	uint16_t length = 2;
 	uint16_t freesize = 0;
 	uint16_t dst_ptr =PAYLOADSTARTPTR;
 	uint8_t mac_addr[] = {0x90,0xA2,0xDA,0x11,0x34,0x30};
@@ -31,7 +35,7 @@ int main(void){
 	uint16_t dstPort = 50001;
 	serial myUART;
 	iena myIENA;
-	clock myClock(64000);
+	clock myClock(16000);
 	W5500Class myW5500;
 	myW5500.init();
 	myW5500.writeMR(MR::RST);
@@ -54,60 +58,61 @@ int main(void){
 
 	uint8_t ShiftCtr = 0;
 	uint16_t ByteCtr = 0;
+	uint16_t enc_word = 0;
 	while(1){
-		//FX_DENC_DCLK;
-		//ready_state=0;
+		//RESETFX_ENC_DCLK;
 		//FIXME: update IENA Header Time
-		switch(ready_state){
+		switch(bReady){
 		case 1:
 			enc_out_state = (PINB & (1 << FX_ENC_OUT));
 			//TOGGLE1;
-			enc_byte = ((enc_byte << 1)|enc_out_state);
+			//enc_byte = ((enc_byte >> 1)|enc_out_state);
+			enc_word = ((enc_word >> 1)|enc_out_state);
 			ShiftCtr++;
-			ready_state=0;
-			//NewValAvailable = 1;
+			bReady=0;
+			bProcessed=1;
+			break;
+		case 0:
+			bStale=1;
+			SETSTALE;
 			break;
 		default:break;
 		}
-//		switch(NewValAvailable){
-//		case 1:
-//			NewValAvailable = 0;
-//			enc_byte = ((enc_byte << 1)|enc_out_state);
-//			StaleBit = 0;
-//			ShiftCtr ++;
-//			break;
-//		case 0:
-//			StaleBit = 1;
-//			break;
-//		default:break;
-//		}
-		switch(ShiftCtr){
-		case 7:
-			TOGGLE2;
-			myW5500.send_data_processing_offset(0,dst_ptr, &enc_byte,sizeof(enc_byte));
-			//TOGGLE3;
-			dst_ptr++;
-			ByteCtr++;
-			ShiftCtr=0;
-			//TOGGLE3;
-			break;
-		default:break;
-		}
-		switch(ByteCtr){
-		case (BYTESPERPACKET-1):
-			TOGGLE3;
-			myW5500.send_data_processing(0,(uint8_t *) &myIENA.header,sizeof(myIENA.header));
-			myW5500.send_data_processing_offset(0,IENAFOOTERSTARTPTR,(uint8_t *) &myIENA.footer,sizeof(myIENA.footer));
-			myW5500.writeSnCR(0,Sock_SEND);
-			dst_ptr = PAYLOADSTARTPTR;
-			myIENA.header.hdr_sequence= (myIENA.header.hdr_sequence>>8)|((myIENA.header.hdr_sequence&0xff)<<8);
-			myIENA.header.hdr_sequence++;
-			myIENA.header.hdr_sequence= (myIENA.header.hdr_sequence>>8)|((myIENA.header.hdr_sequence&0xff)<<8);
-			ByteCtr=0;
-			//TOGGLE3;
-			break;
-		default:break;
-		}
+		//switch(bStale){
+		//case 1:break;
+		//case 0:
+			switch(ShiftCtr){
+			case 15:
+			//case 7:
+				//TOGGLE2;
+				enc_byte[0] = enc_word & 0x00FF;
+				enc_byte[1] = (enc_word & 0xFF00)>>8;
+				myW5500.send_data_processing_offset(0,dst_ptr, enc_byte,length);
+				//TOGGLE3;
+				dst_ptr++;
+				ByteCtr++;
+				ShiftCtr=0;
+				//TOGGLE3;
+				break;
+			default: break;
+			}
+			switch(ByteCtr){
+			case (BYTESPERPACKET-1):
+				//TOGGLE3;
+				myW5500.send_data_processing(0,(uint8_t *) &myIENA.header,sizeof(myIENA.header));
+				myW5500.send_data_processing_offset(0,IENAFOOTERSTARTPTR,(uint8_t *) &myIENA.footer,sizeof(myIENA.footer));
+				myW5500.writeSnCR(0,Sock_SEND);
+				dst_ptr = PAYLOADSTARTPTR;
+				myIENA.header.hdr_sequence= (myIENA.header.hdr_sequence>>8)|((myIENA.header.hdr_sequence&0xff)<<8);
+				myIENA.header.hdr_sequence++;
+				myIENA.header.hdr_sequence= (myIENA.header.hdr_sequence>>8)|((myIENA.header.hdr_sequence&0xff)<<8);
+				ByteCtr=0;
+				//TOGGLE3;
+				break;
+			default:break;
+			}
+			//break;
+		//}
 	}
 	return(0);
 }
