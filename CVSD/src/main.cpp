@@ -23,19 +23,24 @@ int main(void){
 	DDRE = 0x40;		// Pin PE6 als Ausgang initialisieren
 	bool enc_out_state =0;
 	uint8_t enc_byte[2];
-	uint16_t length = 2;
 	uint16_t freesize = 0;
 	uint16_t dst_ptr =PAYLOADSTARTPTR;
 	uint8_t mac_addr[] = {0x90,0xA2,0xDA,0x11,0x34,0x30};
+	//Network Setting for Home
 	uint8_t ip_addr[] = {192,168,2,144};
 	uint8_t remote_ip[] = {192,168,2,114};
 	uint8_t sub_mask[] = {255,255,255,0};
 	uint8_t gtw_addr[] = {192,168,2,1};
+	//Network Settings for Office
+//	uint8_t ip_addr[] = {10,253,1,144};
+//	uint8_t remote_ip[] = {10,253,255,255};
+//	uint8_t sub_mask[] = {255,255,0,0};
+//	uint8_t gtw_addr[] = {10,253,1,253};
 	uint16_t sPort = 50000;
 	uint16_t dstPort = 50001;
 	serial myUART;
 	iena myIENA;
-	clock myClock(16000);
+	clock myClock(32000);
 	W5500Class myW5500;
 	myW5500.init();
 	myW5500.writeMR(MR::RST);
@@ -64,10 +69,11 @@ int main(void){
 		//FIXME: update IENA Header Time
 		switch(bReady){
 		case 1:
+			//RESETFX_ENC_DCLK;
 			enc_out_state = (PINB & (1 << FX_ENC_OUT));
 			//TOGGLE1;
-			//enc_byte = ((enc_byte >> 1)|enc_out_state);
-			enc_word = ((enc_word >> 1)|enc_out_state);
+			//enc_byte = (enc_byte << 1)|enc_out_state;
+			enc_word = (enc_word << 1)|enc_out_state;
 			ShiftCtr++;
 			bReady=0;
 			bProcessed=1;
@@ -85,9 +91,11 @@ int main(void){
 			case 15:
 			//case 7:
 				//TOGGLE2;
-				enc_byte[0] = enc_word & 0x00FF;
-				enc_byte[1] = (enc_word & 0xFF00)>>8;
-				myW5500.send_data_processing_offset(0,dst_ptr, enc_byte ,sizeof(enc_byte));
+				//RESETFX_ENC_DCLK;
+				//enc_word = (enc_word>>8)|((enc_word&0xff)<<8);
+				enc_byte[0] = enc_word & 0xFF;
+				enc_byte[1] = (enc_word & 0xff00) >>8;
+				myW5500.send_data_processing_offset(0,dst_ptr, (uint8_t *) &enc_byte ,sizeof(enc_byte));
 				//TOGGLE3;
 				dst_ptr++;
 				ByteCtr++;

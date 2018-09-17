@@ -13,10 +13,10 @@
 #define BAUD_PRESCALER	(((F_CPU / (BAUDRATE * 16UL)))-1)
 #define TOGGLE_LED (PORTC ^= _BV(7)) //TOGGLE_MAKRO for Debugging PC7
 #define FX_ENC_OUT 5				// FX609 Encoder Ouptut (6), ATMEGA32u4 PB5 (IO9)
-#define FX_ENC_DCLK (PORTD ^= _BV(6))				// FX609 Encoder Data Clock (5), ATMEGA32u4 PD6 (IO12)
+//#define FX_ENC_DCLK (PORTD ^= _BV(6))				// FX609 Encoder Data Clock (5), ATMEGA32u4 PD6 (IO12)
 
-//#define SETFX_ENC_DCLK (PORTD |= _BV(6))				// set FX609 Encoder Data Clock (5), ATMEGA32u4 PD6 (IO12)
-//#define RESETFX_ENC_DCLK (PORTD &= ~(_BV(6)))				// reset FX609 Encoder Data Clock (5), ATMEGA32u4 PD6 (IO12)
+#define SETFX_ENC_DCLK (PORTD |= _BV(6))				// set FX609 Encoder Data Clock (5), ATMEGA32u4 PD6 (IO12)
+#define RESETFX_ENC_DCLK (PORTD &= ~(_BV(6)))				// reset FX609 Encoder Data Clock (5), ATMEGA32u4 PD6 (IO12)
 
 
 #define W5500_CDS (PORTB &= ~(_BV(6)))		// W5500 Chip De-Select (Low active)
@@ -31,7 +31,7 @@
 #define RESETSTALE (PORTD &= ~(_BV(7)))			//reset Pin PD7 for Stale Indication
 
 //#define TOGGLE3 (PORTC ^= _BV(7))			//Pin PC7 for second Interrupt Counter Indication
-#define BYTESPERPACKET 1024					//define how many cvsd bytes/packet should be packetized
+#define BYTESPERPACKET 32					//define how many cvsd bytes/packet should be packetized
 #define IENAHEADERSIZE 14					//IENA Header contains 14 bytes
 #define IENAFOOTERSIZE 2					//nums of byte of IENAFOOTER
 

@@ -16,7 +16,7 @@ uint16_t cntr = 0;
 //volatile bool bit_ready;
 //volatile bool byte_ready;
 //volatile bool packet_ready;
-volatile bool bReady=0;
+volatile bool bReady;
 volatile bool bSkip=0;
 volatile bool bStale=0;
 volatile bool bProcessed=0;
@@ -89,13 +89,9 @@ ISR(TIMER1_COMPA_vect){
 		RESETSKIP;
 		break;
 	}
-	bReady ^= 1;
-	FX_ENC_DCLK;
-	//SETFX_ENC_DCLK;
-//	switch(rate){
-//	case 64000:break;
-//	case 32000:_delay_us(15); break;
-//	case 16000:_delay_us(45); break;
-//	default: break;
-//	}
+	bReady = 1;
+	//FX_ENC_DCLK;
+	SETFX_ENC_DCLK;
+	_delay_us(1);
+	RESETFX_ENC_DCLK;
 	}
