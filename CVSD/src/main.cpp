@@ -15,6 +15,8 @@ extern volatile bool bSkip;
 extern volatile bool bStale;
 extern volatile bool bProcessed;
 
+void ComputeIENATime();
+
 int main(void){
 	PRR0 &= ~(1<<PRSPI);
 	DDRC = 0xC0;		// Pin PC7 und PC6 als Ausgang (LED) initialisieren
@@ -40,7 +42,7 @@ int main(void){
 	uint16_t dstPort = 50001;
 	serial myUART;
 	iena myIENA;
-	clock myClock(32000);
+	clock myClock(FS);
 	W5500Class myW5500;
 	myW5500.init();
 	myW5500.writeMR(MR::RST);
@@ -64,6 +66,7 @@ int main(void){
 	uint8_t ShiftCtr = 0;
 	uint16_t ByteCtr = 0;
 	uint16_t enc_word = 0;
+	uint64_t ll_hdr_time=22.5504e12;
 	while(1){
 		//RESETFX_ENC_DCLK;
 		//FIXME: update IENA Header Time
@@ -114,6 +117,14 @@ int main(void){
 				myIENA.header.hdr_sequence= (myIENA.header.hdr_sequence>>8)|((myIENA.header.hdr_sequence&0xff)<<8);
 				myIENA.header.hdr_sequence++;
 				myIENA.header.hdr_sequence= (myIENA.header.hdr_sequence>>8)|((myIENA.header.hdr_sequence&0xff)<<8);
+				ll_hdr_time = ll_hdr_time + 16;// TIMECOUNTINC;
+				//FIXME: Propper time calculation
+				myIENA.header.hdr_time[5]= ll_hdr_time & 0x0000000000FF;
+				myIENA.header.hdr_time[4]= (ll_hdr_time>>8) & 0x0000000000FF;
+				myIENA.header.hdr_time[3]= (ll_hdr_time>>16) & 0x0000000000FF;
+				myIENA.header.hdr_time[2]= (ll_hdr_time>>24) & 0x0000000000FF;
+				myIENA.header.hdr_time[1]= (ll_hdr_time>>32) & 0x0000000000FF;
+				myIENA.header.hdr_time[0]= (ll_hdr_time>>40) & 0x0000000000FF;
 				ByteCtr=0;
 				//TOGGLE3;
 				break;
@@ -124,6 +135,7 @@ int main(void){
 	}
 	return(0);
 }
+
 
 
 

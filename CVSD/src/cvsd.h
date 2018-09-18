@@ -45,6 +45,10 @@
 #define IENAHEADERSIZEVALUE (a>>8)|((a&0xff)<<8) //doing byte swapping
 #define IENAFOOTERVALUE 0xADDE				//keep in mind Endianess swapping
 
+#define FS 32000
+#define TIMECOUNTINC (16*BYTESPERPACKET*(1/FS*1000))
+
+
 #include "avr/io.h"
 #include <stdio.h>
 #include <stddef.h>
@@ -54,12 +58,12 @@
 #include <string.h>
 #include <ctype.h>
 #include <util/delay.h>
-
+#include "iena.h"
 #include "avr/pgmspace.h"
 #include "serial.h"
 #include "clock.h"
 #include "w5500.h"
-#include "iena.h"
+
 
 
 
