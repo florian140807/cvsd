@@ -9,7 +9,9 @@
 #define SRC_IENA_H_
 
 
+
 class iena{
+
 public:
 	iena();
 	~iena();
@@ -21,8 +23,12 @@ public:
 			uint8_t hdr_status;
 			uint8_t hdr_n2status;
 			uint16_t hdr_sequence;
-		}header;
+		};
+		iena_header header;
 		uint16_t footer;
 };
+
+
+
 
 #endif /* SRC_IENA_H_ */

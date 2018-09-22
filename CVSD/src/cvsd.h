@@ -30,8 +30,8 @@
 #define SETSTALE (PORTD |= _BV(7))			//set Pin PD7 for Stale Indication
 #define RESETSTALE (PORTD &= ~(_BV(7)))			//reset Pin PD7 for Stale Indication
 
-//#define TOGGLE3 (PORTC ^= _BV(7))			//Pin PC7 for second Interrupt Counter Indication
-#define BYTESPERPACKET 32					//define how many cvsd bytes/packet should be packetized
+#define TOGGLE3 (PORTC ^= _BV(7))			//Pin PC7 for second Interrupt Counter Indication
+#define BYTESPERPACKET 16					//define how many cvsd bytes/packet should be packetized
 #define IENAHEADERSIZE 14					//IENA Header contains 14 bytes
 #define IENAFOOTERSIZE 2					//nums of byte of IENAFOOTER
 
@@ -41,13 +41,12 @@
 #define IENAFOOTERSTARTPTR PAYLOADSTARTPTR+BYTESPERPACKET	//Start of IENA Footer is
 
 // Assignments of IENA Header and Footer Fields for Size and Footer
-#define a (BYTESPERPACKET+IENAHEADERSIZE+IENAFOOTERSIZE)/2 //the value Size in the IENA Header is in words, hence divided by 2
+#define a ((BYTESPERPACKET)+IENAHEADERSIZE+IENAFOOTERSIZE)/2 //the value Size in the IENA Header is in words, hence divided by 2
 #define IENAHEADERSIZEVALUE (a>>8)|((a&0xff)<<8) //doing byte swapping
 #define IENAFOOTERVALUE 0xADDE				//keep in mind Endianess swapping
 
-#define FS 32000
+#define FS 16000
 #define TIMECOUNTINC (16*BYTESPERPACKET*(1/FS*1000))
-
 
 #include "avr/io.h"
 #include <stdio.h>
@@ -61,9 +60,8 @@
 #include "iena.h"
 #include "avr/pgmspace.h"
 #include "serial.h"
-#include "clock.h"
+#include "enc_clock.h"
 #include "w5500.h"
-
 
 
 

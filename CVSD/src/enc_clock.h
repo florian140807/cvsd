@@ -5,20 +5,20 @@
  *      Author: Florian
  */
 
-#ifndef _CLOCK_H
-#define _CLOCK_H
+#ifndef _ENC_CLOCK_H
+#define _ENC_CLOCK_H
 
 
 
-class clock {
+class enc_clock {
 public:
-	clock();
-	clock(uint16_t _clk);
+	enc_clock();
+	enc_clock(uint16_t _clk);
 	uint16_t getrate();
-	~clock();
+	~enc_clock();
 private:
 	uint16_t rate;
 
 };
 
-#endif /* _CLOCK_H_ */
+#endif /* _ENC_CLOCK_H_ */

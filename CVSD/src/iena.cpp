@@ -8,7 +8,7 @@
 
 #include "cvsd.h"
 
-iena::iena(){
+iena::iena():header(){
 	header.hdr_key = 0x1189;
 	header.hdr_size = IENAHEADERSIZEVALUE;
 	header.hdr_time[0] = 0x00;
