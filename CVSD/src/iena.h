@@ -15,17 +15,18 @@ class iena{
 public:
 	iena();
 	~iena();
-//private:
-		struct iena_header{
+	void IncSequence();
+	void SetIENATime(uint64_t _time);
+	void SetPayload(uint8_t _index, uint8_t _data);
+private:
 			uint16_t hdr_key;
 			uint16_t hdr_size;
 			uint8_t hdr_time[6];
 			uint8_t hdr_status;
 			uint8_t hdr_n2status;
 			uint16_t hdr_sequence;
-		};
-		iena_header header;
-		uint16_t footer;
+			uint8_t payload[BYTESPERPACKET];
+			uint16_t footer;
 };
 
 
