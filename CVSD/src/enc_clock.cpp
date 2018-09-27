@@ -12,12 +12,12 @@ uint16_t ReadClkCntr = 0;
 uint16_t MrgCntr = 0;
 uint16_t TxClkCntr = 0;
 uint16_t cntr = 0;
+uint8_t ShiftCntr = 0;
 volatile bool bReady;
-volatile bool bSkip=0;
-volatile bool bStale=0;
-volatile bool bProcessed=0;
-volatile bool enc_out_state=0;
-volatile uint8_t enc_byte =0;
+bool enc_out_state=0;
+uint8_t enc_byte =0;
+volatile uint16_t writeIdx = 0;
+volatile uint8_t buffer[BUFSIZE];
 
 
 uint16_t rate = 0;
@@ -76,21 +76,20 @@ enc_clock::~enc_clock() {
  */
 
 ISR(TIMER1_COMPA_vect){
-	RESETSTALE;
-	switch(bProcessed){
-	case 0:
-		bSkip = 1;
-		SETSKIP;
-		break;
-	case 1:
-		bSkip=0;
-		RESETSKIP;
-		break;
-	}
 	SETFX_ENC_DCLK;
 	_delay_us(1);
 	enc_out_state = (PINB & (1<<FX_ENC_OUT));
 	enc_byte = ((enc_byte << 1)|enc_out_state);
+	ShiftCntr--;
 	RESETFX_ENC_DCLK;
-	bReady = 1;
+	bReady=0;
+	switch(ShiftCntr){
+		case 0:
+			buffer[writeIdx++] = enc_byte;
+			writeIdx &= BUFMSK;
+			ShiftCntr=8;
+			bReady=1;
+			break;
+		default: break;
+	}
 	}
