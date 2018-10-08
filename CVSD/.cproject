@@ -69,7 +69,7 @@
 								<inputType id="de.innot.avreclipse.compiler.winavr.input.1276185339" name="C Source Files" superClass="de.innot.avreclipse.compiler.winavr.input"/>
 							</tool>
 							<tool id="de.innot.avreclipse.tool.cppcompiler.app.debug.513103689" name="AVR C++ Compiler" superClass="de.innot.avreclipse.tool.cppcompiler.app.debug.234615435">
-								<option id="de.innot.avreclipse.cppcompiler.option.optimize.649878857" superClass="de.innot.avreclipse.cppcompiler.option.optimize" useByScannerDiscovery="false" value="de.innot.avreclipse.cppcompiler.optimize.size" valueType="enumerated"/>
+								<option id="de.innot.avreclipse.cppcompiler.option.optimize.649878857" name="Optimization Level" superClass="de.innot.avreclipse.cppcompiler.option.optimize" useByScannerDiscovery="false" value="de.innot.avreclipse.cppcompiler.optimize.size" valueType="enumerated"/>
 								<inputType id="de.innot.avreclipse.cppcompiler.input.1540395025" superClass="de.innot.avreclipse.cppcompiler.input"/>
 							</tool>
 							<tool id="de.innot.avreclipse.tool.linker.winavr.app.debug.1590308167" name="AVR C Linker" superClass="de.innot.avreclipse.tool.linker.winavr.app.debug.608670505"/>
@@ -83,7 +83,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="w5100.cpp|udp.cpp|udp_client_server.cpp|frame.cpp|mmapGpio.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="src/serial.cpp|w5100.cpp|udp.cpp|udp_client_server.cpp|frame.cpp|mmapGpio.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -141,7 +141,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="w5500.cpp|SPI.cpp|udp.cpp|udp_client_server.cpp|mmapGpio.cpp|frame.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="src/serial.cpp|w5500.cpp|SPI.cpp|udp.cpp|udp_client_server.cpp|mmapGpio.cpp|frame.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
