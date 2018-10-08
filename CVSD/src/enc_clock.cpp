@@ -3,7 +3,7 @@
 bool enc_out_state=0;				/// Init for CVSD Encoder digital output; connected to FX_ENC_OUT
 uint8_t ShiftCntr = 0;				/// Init for Shift Counter to merge 8 Samples from enc_out_state into 1 Byte
 uint8_t enc_byte =0;				/// Init of the 8 Shift left operations
-volatile uint16_t writeIdx = 0;		/// Init Index of the Ring buffer, volatile because of shared with main and enc_clock
+volatile uint16_t writeIndxCntr = 0;		/// Init Index of the Ring buffer, volatile because of shared with main and enc_clock
 volatile uint8_t buffer[BUFSIZE];	/// Init of Ring buffer size by the value of BUFSIZE, volatile because of shared with main and enc_clock
 volatile bool bReady;				/// Declaration of ready bit, indicates that 1 byte is complete available, volatile because of shared with main and enc_clock
 uint16_t rate = 0;					/// Init of rate
@@ -79,8 +79,8 @@ ISR(TIMER1_COMPA_vect){
 	bReady=0;										/// reset ready bit indicates encoder byte is not ready to be written in the buffer
 	switch(ShiftCntr){								/// check shift counter Value
 		case 0:										/// all 8 bits placed in the encoder byte
-			buffer[writeIdx++] = enc_byte;			/// write encoder byte into buffer, increment write counter
-			writeIdx &= BUFMSK;						/// mask write counter value to avoid buffer running out of range
+			buffer[writeIndxCntr++] = enc_byte;		/// write encoder byte into buffer, increment write counter
+			writeIndxCntr &= BUFMSK;				/// mask write counter value to avoid buffer running out of range
 			ShiftCntr=8;							/// reset shift counter
 			bReady=1;								/// tell main() that encoder byte is ready to be processed
 			break;
