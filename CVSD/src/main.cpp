@@ -50,8 +50,7 @@ enc_clock EncoderSamplingClock(FS);									/// create enc_clock instance, Sampl
 
 int main(void){														/// main()
 	uint16_t readIndxCntr = 0;										/// init readIndxCntr index counter
-	//TODO: reference args to macros for utc time
-	uint64_t ll_hdr_time = SetCurrentUtcTimeInUs(292,07,14,25);	 	/// init and set current time for IENA header time field
+	uint64_t ll_hdr_time = SetCurrentUtcTimeInUs(301,18,13,25);	 	/// init and set current time for IENA header time field
 	PRR0 &= ~(1<<PRSPI);											/// disable power reduction serial peripheral interface SPI
 	InitIO();
 	InitW5500LayerSettings();
@@ -123,7 +122,7 @@ void InitW5500LayerSettings(void){
 }
 
 uint64_t SetCurrentUtcTimeInUs(uint16_t _doy, uint8_t _hour, uint8_t _min, uint8_t _sec){
-	uint64_t UtcHdrTime = (_doy*24)+_hour;
+	uint64_t UtcHdrTime = (24*_doy) + _hour;
 	UtcHdrTime = (UtcHdrTime * 60)+_min;
 	UtcHdrTime = (UtcHdrTime * 60)+_sec;
 	UtcHdrTime = UtcHdrTime * 1e6;
