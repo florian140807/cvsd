@@ -48,13 +48,6 @@
 #define BUFMSK 1023								/// Buffer mask for Shared Memory as ring buffer to prevent Overflow
 #endif
 
-/*
- * Definition of Current UTC Time
- */
-
-//TODO: Define Macros for doy, hour, min, sec
-
-
 
 /*
  * Calculation of IENA Header SizeValue
