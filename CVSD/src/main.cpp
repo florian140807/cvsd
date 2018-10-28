@@ -43,29 +43,24 @@ extern volatile uint16_t writeIndxCntr;
 extern volatile uint8_t buffer[];
 W5500Class W5500Chip;
 iena IenaPacket;
+enc_clock EncoderSamplingClock(FS);									/// create enc_clock instance, Samplingrate = FS
+
 
 
 
 int main(void){														/// main()
-	bool bmatch = 0;												/// init bmatch bit to compare index counter (readIndxCntr/writeIndxCntr)
 	uint16_t readIndxCntr = 0;										/// init readIndxCntr index counter
-	uint64_t ll_hdr_time = SetCurrentUtcTimeInUs(281,15,33,45);	 	/// init and set current time for IENA header time field
+	//TODO: reference args to macros for utc time
+	uint64_t ll_hdr_time = SetCurrentUtcTimeInUs(292,07,14,25);	 	/// init and set current time for IENA header time field
 	PRR0 &= ~(1<<PRSPI);											/// disable power reduction serial peripheral interface SPI
 	InitIO();
 	InitW5500LayerSettings();
-	enc_clock EncoderSamplingClock(FS);								/// create enc_clock instance, Samplingrate = FS
 	sei();															/// enable interrupts
 	while(1){														///while() loop
-		if(readIndxCntr == writeIndxCntr){							/// if both index counter are equal,
-			bmatch=1;												///	set bmatch bit
-		}															///
-			else{													///
-				bmatch=0;											/// reset bmatch bit
-		}
 		switch (bReady){											/// check if ISR allows reading of the next buffered enc_byte
 		case 0: break;												/// not allowed, ISR not ready, so return to while()
 		case 1:
-			switch(bmatch){											///	check bmatch bit (both index counter equal
+			switch(readIndxCntr == writeIndxCntr){					///	check both index counter equal
 			case (1):break;											/// yes, counter equal, so return to while()
 			case (0):												/// no, so proceed with send procedure
 					IenaPacket.SetPayload(readIndxCntr,buffer[readIndxCntr]);	/// copy buffered enc_byte into IENA Payload array
