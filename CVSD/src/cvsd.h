@@ -40,7 +40,7 @@
 #define FS 64000								/// set CVSD sampling rate in Hz
 #if FS < 17000									/// conditional compiling of BYTESPERPACKET depending on CVSD sampling rate
 #define BYTESPERPACKET 16						/// for 16ksps CVSD sampling rate 16 bytes should be placed into on IENA packet
-#define BUFSIZE 32							/// Shared Memory between main() and ISR
+#define BUFSIZE 32								/// Shared Memory between main() and ISR
 #define BUFMSK 31								/// Buffer mask for Shared Memory as ring buffer to prevent Overflow
 #elif  FS > 16000
 #define BYTESPERPACKET 256						/// for 32 or 64ksps CVSD sampling rate 256 bytes should be placed into on IENA packet
