@@ -31,30 +31,44 @@
 
 #define F_CPU 16000000UL						/// CPU Speed for _delay() routines
 #define FX_ENC_OUT 5							/// FX609 Encoder Output (Pin 6), ATMEGA32u4 PB5 (IO9)
-#define SETFX_ENC_DCLK (PORTD |= _BV(6))		/// set FX609 Encoder Data Clock (5), ATMEGA32u4 PD6 (IO12)
-#define RESETFX_ENC_DCLK (PORTD &= ~(_BV(6)))	/// reset FX609 Encoder Data Clock (5), ATMEGA32u4 PD6 (IO12)
 #define IENAHEADERSIZE 14						/// IENA Header contains 14 byte
 #define IENAFOOTERSIZE 2						/// IENAFOOTER contains 2 byte
 #define IENAFOOTERVALUE 0xADDE					/// keep in mind endianness conflict, 0xADDE results in 0xDEAD
 #define IENAKEYVALUE 0x1189						/// keep in mind endianness conflict, 0x1189 results in 0x8911
 #define DESTINATIONPORT 50001					/// Define Destination Port for IENA Packets
 #define SOURCEPORT 50000						/// Define Source Port for Sn Socket Register
-
-#define FS 16000								/// set CVSD sampling rate in Hz
+#define FS 64000								/// set CVSD sampling rate in Hz
 #if FS < 17000									/// conditional compiling of BYTESPERPACKET depending on CVSD sampling rate
 #define BYTESPERPACKET 16						/// for 16ksps CVSD sampling rate 16 bytes should be placed into on IENA packet
+#define BUFSIZE 32							/// Shared Memory between main() and ISR
+#define BUFMSK 31								/// Buffer mask for Shared Memory as ring buffer to prevent Overflow
 #elif  FS > 16000
 #define BYTESPERPACKET 256						/// for 32 or 64ksps CVSD sampling rate 256 bytes should be placed into on IENA packet
-#endif
-
-
-// Calculation of IENA Header SizeValue
-#define PacketSize ((BYTESPERPACKET)+IENAHEADERSIZE+IENAFOOTERSIZE)/2 	/// Size of the IENA Packet to be placed into the IENA Header (is in words, hence divided by 2)
-#define IENAHEADERSIZEVALUE (PacketSize>>8)|((PacketSize & 0xff)<<8) 	/// doing byte swapping
-
 #define BUFSIZE 1024							/// Shared Memory between main() and ISR
 #define BUFMSK 1023								/// Buffer mask for Shared Memory as ring buffer to prevent Overflow
+#endif
 
+/*
+ * Definition of Current UTC Time
+ */
+
+//TODO: Define Macros for doy, hour, min, sec
+
+
+
+/*
+ * Calculation of IENA Header SizeValue
+ */
+#define PacketSize ((BYTESPERPACKET)+IENAHEADERSIZE+IENAFOOTERSIZE)/2 	/// Size of the IENA Packet to be placed into the IENA Header (is in words, hence divided by 2)
+#define IENAHEADERSIZEVALUE (PacketSize>>8)|((PacketSize & 0xff)<<8) 	/// doing byte swapping
+/*
+ * Macros for toggling FX609 Encoder Data Clock Pin
+ */
+#define SETFX_ENC_DCLK (PORTD |= _BV(6))		/// set FX609 Encoder Data Clock (5), ATMEGA32u4 PD6 (IO12)
+#define RESETFX_ENC_DCLK (PORTD &= ~(_BV(6)))	/// reset FX609 Encoder Data Clock (5), ATMEGA32u4 PD6 (IO12)
+/*
+ * Macro for incrementing the timestamp for the next IENA packet
+ */
 #define TIMECOUNTINC (((8*BYTESPERPACKET))*1000000)/FS		/// calculate IENA headertime Increment
 
 
@@ -120,6 +134,7 @@ void InitIO(void);
   *
   */
 void InitW5500LayerSettings(void);
+
 /** \brief Manual Setup of UTC Time for IENA Header Time
  * \param _doy current day of year
  * \param _hour current hour, keep in mind UTC time scale (means local winter time - 2)
