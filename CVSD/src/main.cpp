@@ -49,8 +49,12 @@ enc_clock EncoderSamplingClock(FS);									/// create enc_clock instance, Sampl
 
 
 int main(void){														/// main()
+	uint16_t _cday = 1;											/// current day of year; Range 1 - 365 (366)
+	uint8_t _chour = 12;											/// current hour of day; Range 0 - 23
+	uint8_t _cmin = 4;												/// current minute of hour; Range 0 - 59
+	uint8_t _csec = 0;												/// current second of minute; Range 0 - 59
 	uint16_t readIndxCntr = 0;										/// init readIndxCntr index counter
-	uint64_t ll_hdr_time = SetCurrentUtcTimeInUs(301,18,13,25);	 	/// init and set current time for IENA header time field
+	uint64_t ll_hdr_time = SetCurrentUtcTimeInUs((_cday-1),_chour,_cmin,_csec);	/// init and set current time for IENA header time field; -1 necessary because _cday has not finished yet
 	PRR0 &= ~(1<<PRSPI);											/// disable power reduction serial peripheral interface SPI
 	InitIO();
 	InitW5500LayerSettings();
@@ -122,10 +126,12 @@ void InitW5500LayerSettings(void){
 }
 
 uint64_t SetCurrentUtcTimeInUs(uint16_t _doy, uint8_t _hour, uint8_t _min, uint8_t _sec){
-	uint64_t UtcHdrTime = (24*_doy) + _hour;
-	UtcHdrTime = (UtcHdrTime * 60)+_min;
-	UtcHdrTime = (UtcHdrTime * 60)+_sec;
-	UtcHdrTime = UtcHdrTime * 1e6;
+	uint64_t UtcHdrTime =0;
+	UtcHdrTime = (_doy * 24);
+	UtcHdrTime = (UtcHdrTime + _hour);
+	UtcHdrTime = (UtcHdrTime * 60 + _min);
+	UtcHdrTime = (UtcHdrTime * 60 + _sec);
+	UtcHdrTime = (UtcHdrTime * 1000000);
 	return UtcHdrTime;
 }
 
