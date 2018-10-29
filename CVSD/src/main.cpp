@@ -43,17 +43,17 @@ extern volatile uint16_t writeIndxCntr;
 extern volatile uint8_t buffer[];
 W5500Class W5500Chip;
 iena IenaPacket;
-enc_clock EncoderSamplingClock(FS);									/// create enc_clock instance, Samplingrate = FS
+enc_clock EncoderSamplingClock(FS);								/// create enc_clock instance, Samplingrate = FS
+uint16_t _cday = 1;												/// current day of year; Range 1 - 365 (366)
+uint8_t _chour = 12;											/// current hour of day; Range 0 - 23
+uint8_t _cmin = 4;												/// current minute of hour; Range 0 - 59
+uint8_t _csec = 0;												/// current second of minute; Range 0 - 59
+uint16_t readIndxCntr = 0;										/// init readIndxCntr index counter
 
 
 
 
 int main(void){														/// main()
-	uint16_t _cday = 1;											/// current day of year; Range 1 - 365 (366)
-	uint8_t _chour = 12;											/// current hour of day; Range 0 - 23
-	uint8_t _cmin = 4;												/// current minute of hour; Range 0 - 59
-	uint8_t _csec = 0;												/// current second of minute; Range 0 - 59
-	uint16_t readIndxCntr = 0;										/// init readIndxCntr index counter
 	uint64_t ll_hdr_time = SetCurrentUtcTimeInUs((_cday-1),_chour,_cmin,_csec);	/// init and set current time for IENA header time field; -1 necessary because _cday has not finished yet
 	PRR0 &= ~(1<<PRSPI);											/// disable power reduction serial peripheral interface SPI
 	InitIO();
