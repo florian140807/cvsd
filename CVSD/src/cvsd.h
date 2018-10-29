@@ -145,7 +145,7 @@ void InitW5500LayerSettings(void);
 
 /** \brief Manual Setup of UTC Time for IENA Header Time
  * \param _doy current day of year
- * \param _hour current hour, keep in mind UTC time scale (means local winter time - 2)
+ * \param _hour current hour, keep in mind UTC time scale
  * \param _min current minute
  * \param _sec actual second - 4-5 seconds (to cover programming process
  * \return ll_hdr_time current time in microseconds since Jan. 1st *
