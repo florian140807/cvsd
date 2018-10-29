@@ -1,0 +1,16 @@
+digraph "enc_clock.h"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="enc_clock.h",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="cvsd.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$cvsd_8h.html",tooltip="This header file provide Macros, Includes and declarations of some functions used by main..."];
+  Node2 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="enc_clock.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$enc__clock_8cpp.html"];
+  Node2 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="iena.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$iena_8cpp.html"];
+  Node2 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="main.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$main_8cpp.html",tooltip="The main.cpp file. "];
+  Node2 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="w5500.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$w5500_8cpp.html"];
+}
