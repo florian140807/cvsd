@@ -37,15 +37,31 @@
 #define IENAKEYVALUE 0x1189						/// keep in mind endianness conflict, 0x1189 results in 0x8911
 #define DESTINATIONPORT 50001					/// Define Destination Port for IENA Packets
 #define SOURCEPORT 50000						/// Define Source Port for Sn Socket Register
-#define FS 64000								/// set CVSD sampling rate in Hz
-#if FS < 17000									/// conditional compiling of BYTESPERPACKET depending on CVSD sampling rate
+//****************************************************************************************************************
+//****************************************************************************************************************
+//***************************************SET HERE THE DESIRED SAMPLING RATE**************************************
+//****************************************************************************************************************
+#define FS 64000								/// set CVSD sampling rate in Hz 16000, 32000 or 64000 sps
+//****************************************************************************************************************
+//****************************************************************************************************************
+#if FS == 16000									/// conditional compiling depending on CVSD sampling rate
 #define BYTESPERPACKET 16						/// for 16ksps CVSD sampling rate 16 bytes should be placed into on IENA packet
 #define BUFSIZE 32								/// Shared Memory between main() and ISR
 #define BUFMSK 31								/// Buffer mask for Shared Memory as ring buffer to prevent Overflow
-#elif  FS > 16000
+#elif  FS == 32000
 #define BYTESPERPACKET 256						/// for 32 or 64ksps CVSD sampling rate 256 bytes should be placed into on IENA packet
 #define BUFSIZE 1024							/// Shared Memory between main() and ISR
 #define BUFMSK 1023								/// Buffer mask for Shared Memory as ring buffer to prevent Overflow
+#elif  FS == 64000
+#define BYTESPERPACKET 256						/// for 32 or 64ksps CVSD sampling rate 256 bytes should be placed into on IENA packet
+#define BUFSIZE 1024							/// Shared Memory between main() and ISR
+#define BUFMSK 1023								/// Buffer mask for Shared Memory as ring buffer to prevent Overflow
+#else
+#undef FS										/// undefine FS to prevent predefinition
+#define FS 16000								/// default values for any other FS value than 16000, 32000 or 64000 sps
+#define BYTESPERPACKET 16
+#define BUFSIZE 32
+#define BUFMSK 31
 #endif
 
 
@@ -63,7 +79,6 @@
  * Macro for incrementing the timestamp for the next IENA packet
  */
 #define TIMECOUNTINC (((8*BYTESPERPACKET))*1000000)/FS		/// calculate IENA headertime Increment
-
 
 
 #include "avr/io.h"
